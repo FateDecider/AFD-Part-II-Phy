@@ -1,0 +1,1852 @@
+\documentclass[a4paper]{article}
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{float}
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{amsmath}
+\usepackage{amstext}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{eqnarray}
+\usepackage{float}
+\usepackage{esint}
+\usepackage{wrapfig}
+\usepackage{gensymb}
+\usepackage{lipsum}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage[caption=false]{subfig}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\Auto}{Aut}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\R}{Im}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Mod}{mod}
+\DeclareMathOperator{\cl}{cl}
+\newcommand{\dbar}{d\hspace*{-0.08em}\bar{}\hspace*{0.1em}}
+\newcommand{\iso}{\xrightarrow{
+   \,\smash{\raisebox{-0.65ex}{\ensuremath{\scriptstyle\sim}}}\,}}
+\newtheorem{post}{Postulate}[section]
+\newtheorem{eg}{Example}[section]
+\newtheorem{remarks}{Remarks}[section]
+\newtheorem{notation}{Notation}[section]
+\newtheorem{Note}{Note}[section]
+\definecolor{darkblue}{RGB}{	0, 0, 139}
+\newtheoremstyle{new}% <name>
+{2pt}% <Space above>
+{2pt}% <Space below>
+{\color{darkblue}}% Body font
+{}% <Indent amount>
+{\bfseries\color{black}}% Theorem head font
+{:}% <Punctuation after theorem head>
+{.5em}% <Space after theorem headi>
+{}% <Theorem head spec (can be left empty, meaning `normal')>
+\theoremstyle{new}
+\newtheorem{law}{Law}[section]
+\newtheorem{defi}{Definition}[section]
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{cor}{Corollary}[section]
+
+
+\title{\textbf{Part II AFD Summary Notes}}
+\author{Tai Yingzhe, Tommy (ytt26)}
+\date{}
+\setlength{\parindent}{0cm}
+\begin{document}
+\maketitle
+{\small\tableofcontents}
+\subsection*{Acknowledgements:}
+Many thanks to my supervisor Sergei Dyda, and the lecturer Christopher Reynolds for their guidance.
+\section{Fundamental fluid dynamics}
+\subsection{Kinematics}
+\begin{defi}[Continuum approximation]
+We approximate scalar and vector fields of fluids as continuous fields by averaging over small linear dimension $L^3$ such that $10^{-8}$ m $<<$ $L$ $<<$ length of continuum variation.
+\end{defi}
+We will adopt a smooth continuum approximation for scalar fields $\rho(\mathbf{x},t)$ and $P(\mathbf{x},t)$ and vector field $\mathbf{u}(\mathbf{x},t)$. 
+\begin{defi}[Fluid element]
+A fluid element is a region in a fluid that is small enough such that there is no significant variations of any property $q$, i.e.
+\begin{equation}
+\ell_{\text{region}}<<\ell_{\text{scale}}\sim\frac{q}{|\boldsymbol{\nabla}q|}\label{smallenough}
+\end{equation}
+but large enough to contain sufficient particles to be considered in the continuum limit, i.e.
+\begin{equation}
+n\ell^3_{\text{region}}>>1\label{largeenough}
+\end{equation}
+\end{defi}
+\begin{defi}[Collisional fluid]
+In a sufficiently large fluid element, if constituent particles know about the local conditions through interactions with each other, then the fluid is said to be a collisional fluid, i.e.
+\begin{equation}
+\lambda<<\ell_{\text{region}}\label{collisional}
+\end{equation}
+where $\lambda$ is a mean free path. 
+\end{defi}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item In a collisional fluid, particles will then attain a distribution of velocities that maximizes the entropy of the system at a given temperature. A collisional fluid at a given density $\rho$ and temperature $T$ will have a well-defined distribution of particle speeds in the local rest frame, and hence a well-defined pressure $P$, via equation of state $P=P(\rho,T)$.
+\item $\ell_{\text{region}}$ is purely a conceptual entity, which will not enter into the fluid equations. However, it is necessary to check Eqn.~\ref{collisional} before invoking the fluid equations.
+\end{enumerate}
+\end{remarks}
+\begin{defi}[Collisionless fluid]
+In a collisionless fluid, particles do not interact frequently enough to satisfy Eqn.~\ref{collisional}. The local distribution of the particle speeds do not correspond to maximum entropy solution, instead depending on the initial conditions and non-local condition.
+\end{defi}
+There are two different descriptions for fluids: 
+\begin{defi}[Eulerian description]
+In the Eulerian description, we consider a small volume at a fixed spatial position. The fluid flows through the volume with physical variables specified as functions of time and the (fixed) position of the small volume. The change of any measurable quantity as a function of time at that position is $\partial/\partial t$ of the quantity, evaluated at the fixed position.
+\end{defi}
+\begin{defi}[Lagrangian description]
+In the Lagrangian description, we consider a particular fluid element and examines the change in variables in that particular element. The spatial reference system is comoving with the fluid. The time derivative is now a partial one at a fixed label (for a particular fluid element) and the rate of change with respect to time for a fixed element is the material derivative $D/Dt$.
+\end{defi}
+\begin{eg}
+The Lagrangian approach is useful if the path of an individual element is important. For instance, tracing the trajectory of a parcel of gas that has been enriched by heavy elements as it is ejected into the interstellar medium by a supernova. The Eulerian approach is more useful if the motion of individual fluid elements is not of interest, for instance, in steady flows.
+\end{eg}
+\begin{prop}[Material Derivative]
+The rate of change seen by a frame moving with the fluid:
+\begin{equation}
+\frac{D}{Dt}f(\mathbf{r}(t),t)=\frac{d\mathbf{r}}{dt}\cdot\boldsymbol{\nabla}f(\mathbf{r})+\frac{\partial f}{\partial t}=\mathbf{u}\cdot\boldsymbol{\nabla}f+\frac{\partial f}{\partial t}\label{material}
+\end{equation}
+where $\frac{d\mathbf{r}}{dt}=\mathbf{u}(\mathbf{r},t)$. The observer in this frame has a position at time $t$ to be $\mathbf{r}$.
+\end{prop}
+\begin{proof}
+Consider any quantity $f$ in a fluid element which is at position $\mathbf{r}$ at time $t$. At time $t+\delta t$, the element is at $\mathbf{r}+\delta\mathbf{r}$, then
+\begin{align}
+\frac{Df}{Dt}&=\lim_{\delta t\rightarrow 0}\frac{f(\mathbf{r}+\delta\mathbf{r},t+\delta t)-f(\mathbf{r},t)}{\delta t}\nonumber\\&=\lim_{\delta t\rightarrow 0}\frac{f(\mathbf{r},t+\delta t)-f(\mathbf{r},t)+f(\mathbf{r}+\delta\mathbf{r},t+\delta t)-f(\mathbf{r},t+\delta t)}{\delta t}\nonumber\\&=\lim_{\delta t\rightarrow 0}\frac{1}{\delta t}\bigg\{\frac{\partial f(\mathbf{r},t)}{\partial t}\delta t+\delta\mathbf{r}\cdot\bigg[\boldsymbol{\nabla}f(\mathbf{r},t)+\frac{\partial\boldsymbol{\nabla}f}{\partial t}\delta t+\dots\bigg]\bigg\}\nonumber
+\end{align}
+In the limit $\delta t,\delta r\rightarrow 0$, we obtain our desired result.
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item  $\frac{D}{Dt}f=0$ does not mean $f$ is a constant, it means $f$ is conserved by each individual fluid element.
+\item  We sometimes call $D/Dt$ the total, convected or substantial derivative.
+\end{enumerate}
+\end{remarks}
+There are two different ways to characterize fluid flow:
+\begin{defi}[Pathline]
+A pathline is a trajectory of a single fluid parcel or particle, starting at some given point in the flow.
+\begin{equation}
+\frac{\partial}{\partial t}\mathbf{r}=\mathbf{u}(\mathbf{r},t)\label{pathline}
+\end{equation}
+\end{defi}
+\begin{defi}[Streamline]
+Streamlines are instantaneous tangents to the instantaneous flow direction:
+\begin{equation}
+\frac{\partial}{\partial s}\mathbf{r}=\mathbf{u}[\mathbf{r}(s,\mathbf{x_0},t)]\label{streamline1}
+\end{equation}
+for fixed $t$ and position $\mathbf{x_0}$ where $s$ is a parameter along the curve.
+\end{defi}
+\begin{remarks}
+An equivalent way of obtaining streamlines is to take
+\begin{equation}
+\frac{d\mathbf{r}}{ds}\times\mathbf{u}=\boldsymbol{0}\label{streamline2}
+\end{equation}
+In Cartesians, this is simply $\frac{dx}{u_x}=\frac{dy}{du_y}=\frac{dz}{du_z}$.
+\end{remarks}
+\begin{eg}
+Consider a two-dimensional velocity field $\mathbf{u}(\mathbf{x},t)=(yt,1)$, a pathline is a curve $\mathbf{x}=\mathbf{X}(t;\mathbf{x_0})$ defined by
+$$\frac{\partial}{\partial t}\mathbf{X}(t)=\mathbf{u}(\mathbf{X}(t),t)$$
+with $\mathbf{X}=\mathbf{x_0}=(x_0,y_0)$ at $t=0$. Hence, $\frac{\partial X}{\partial t}=Yt$ and $\frac{\partial Y}{\partial t}=1\implies Y=y_0+t\implies X=x_0+\frac{1}{2}y_0t^2+\frac{1}{3}t^3$. Eliminate $t$ to obtain pathline:
+$$X=x_0+\frac{1}{2}y_0(Y-y_0)^2+\frac{1}{3}(Y-y_0)^3$$
+For streamlines, $t$ is now fixed. Solving this problem produces a curve parameterized by $s$, when $s$ is varied in the function $\mathbf{X}(s;\mathbf{x_0},t)$. A set of such curves for different values of $\mathbf{x_0}$ gives us a snapshot of the flow at the single instant represented by the value of t. Hence, $\frac{\partial X}{\partial s}=Yt$, $\frac{\partial Y}{\partial s}=1\implies Y(s;\mathbf{x_0},t)=y_0+s\implies X(s;\mathbf{x_0},t)x_0+y_0ts+\frac{1}{2}ts^2$. Eliminate $s$ to get streamline at time $t$:
+$$X=x_0+y_0t(Y-y_0)+\frac{1}{2}t(Y-y_0)^2=\frac{1}{2}tY^2+(x_0-0.5ty_0^2)$$
+\end{eg}
+\begin{remarks}
+If $\mathbf{u}$ is not a function of $t$, then the pathlines and streamlines would all coincide. Such flows are steady flows.
+\end{remarks}
+\begin{eg}
+If $f(\mathbf{x},t)$ is the concentration of an inert substance, measured as amount per unit mass of fluid, then $\frac{Df}{Dt}=0$ if we ignore molecular diffusion. When $Df/Dt=0$, we can have non-zero values of $\partial f/\partial t$, i.e. blobs of dye are being carried past a fixed point $\mathbf{x}$. 
+\end{eg}
+\begin{defi}[Streaklines]
+A streakline is the locus of points of all fluid that have passed through a given spatial point in the past $\mathbf{r}(t)=\mathbf{r_0}$.
+\end{defi}
+\begin{eg}
+Consider all particles passing through a given point being dyed red as they do so: the streakline is the resulting red line.
+\end{eg}
+\begin{remarks}[Application to astronomy]
+Although fluids are always in practice composed of particles at a microscopic level, the equations of hydrodynamics treat the fluid as a continuous medium with well-defined macroscopic properties (e.g. pressure or density) at each point. Such a description therefore presupposes that we are dealing with such large numbers of particles locally that it is meaningful to average their properties rather than following individual particle trajectories. Similarly, we may treat stars as the `particles', to determine the mean properties of the stars in each region.
+\end{remarks}
+\begin{eg}
+A common example of astrophysical fluids is the distributed gas in the interstellar medium (ISM), intergalactic medium (IGM) and intracluster medium (ICM). 
+\end{eg}
+
+
+
+\begin{thm}[Conservation of Mass]
+Consider an arbitrary finite volume $V$ fixed in space, bounded by surface $S$, with outward normal $\mathbf{n}$. Mass inside $V$ changes because it flows across the boundary surface. The rate of change of total mass occupying $V$ is equal to the flow out:
+\begin{equation}
+\frac{d}{dt}\int_V\rho dV=-\int_S\rho(\mathbf{u}\cdot\mathbf{n})dS\implies\frac{\partial\rho}{\partial t}+\boldsymbol{\nabla}\cdot(\rho\mathbf{u})=0\label{continuity1}
+\end{equation}
+Writing this in terms of material derivative (Lagrangian perspective):
+\begin{equation}
+\frac{D\rho}{Dt}+\rho\boldsymbol{\nabla}\cdot\mathbf{u}=0\label{continuity2}
+\end{equation}
+This is the equation of continuity.
+\end{thm}
+\begin{proof}
+Consider fluid flowing through a small portion of $S$, with area $\delta S$ in time $\delta t$. The volume of this slanted cylinder of fluid that has passed out through $\delta S$ is $(\mathbf{n}\cdot\delta S)\cdot(\mathbf{u}\delta t)$. Then,
+$$\frac{\delta m_{out}}{\delta t}=\rho(\mathbf{u}\cdot\mathbf{n})\delta S\implies\frac{dm_{out}}{dt}=\int_S\rho(\mathbf{u}\cdot\mathbf{n})dS$$
+Since the rate of change of total mass occupying $V$ is equal to the rate of mass loss.
+$$\frac{d}{dt}\int_V\rho dV=-\frac{dm_{out}}{dt}=-\int_S\rho(\mathbf{u}\cdot\mathbf{n})dS=-\int_V\boldsymbol{\nabla}\cdot(\rho\mathbf{u})dV$$
+where we have invoked the Divergence Theorem. We thus obtain the differential form:
+$$\frac{\partial\rho}{\partial t}=-\boldsymbol{\nabla}\cdot(\rho\mathbf{u})$$
+From the definition of material derivative, we deduce
+$$\frac{D\rho}{Dt}=-\rho(\boldsymbol{\nabla}\cdot\mathbf{u})$$
+since $\boldsymbol{\nabla}\cdot(\rho\mathbf{u})=\mathbf{u}\cdot\boldsymbol{\nabla}\rho+\rho\boldsymbol{\nabla}\cdot\mathbf{u}$.
+\end{proof}
+\begin{defi}[Incompressible flow]
+An incompressible flow is a fluid with constant $\rho$. 
+\end{defi}
+\begin{cor}[Equivalent Statement of Incompressible Flow]
+\begin{equation}
+\boldsymbol{\nabla}\cdot\mathbf{u}=0\label{incompressible}
+\end{equation}
+\end{cor}
+\begin{proof}
+From Eqn.~\ref{continuity2} and for constant $\rho$, $D\rho/Dt=0\implies\boldsymbol{\nabla}\cdot\mathbf{u}=0$.
+\end{proof}
+\newpage
+\subsection{Dynamics}
+\begin{defi}[Surface Force]
+Surface force acts uniformly on an entire surface. One example is that due to pressure, which is an isotropic scalar field. The surface force due to pressure is
+\begin{equation}
+-\int_Sp(\mathbf{x},t)\mathbf{\hat{n}}dS\label{surfaceforce}
+\end{equation}
+where the negative sign is present since the pressure force acts onto a volume element, hence anti-parallel to $\mathbf{\hat{n}}$. Pressure forces are strictly speaking isotropic, independent of the orientation of $dS$ at $\mathbf{x}$ with unit normal $\mathbf{\hat{n}}$.
+\end{defi}
+\begin{defi}[Volume Force]
+Volume force acts entirely on the volume element. One example is gravity, which also happens to be a conservative force. Let $\mathbf{f}$ be the body force per unit mass, then the total body force is
+\begin{equation}
+\int_V\rho\mathbf{f}dV\label{volumeforce}
+\end{equation}
+\end{defi}
+\begin{defi}[Inviscid Fluid]
+Inviscid fluid do not have friction, i.e. not viscous.
+\end{defi}
+\begin{thm}[Momentum Equation for Inviscid Fluid]
+Consider an arbitrary volume $V$, fixed in space, and bounded by a surface $S$, with outward normal, then the following relationship for incompressible fluid is true:
+\begin{equation}
+\frac{d}{dt}\int_V\rho\mathbf{u}dV=\int_V\rho\mathbf{f}dV-\int_Sp\mathbf{n}dS-\int_S\rho\mathbf{u}(\mathbf{u}\cdot\mathbf{n})dS\label{momentumEqn}
+\end{equation}
+\end{thm}
+\begin{proof}
+The rate of change of momentum within $V$ is equal to the sum of body forces, $\int_V\rho\mathbf{f}dV$, and surface forces, $-\int_Sp\mathbf{n}dS$, together with the rate of change of outward momentum. The rate of change of outward momentum can be computed from the following:\\[5pt]
+Consider a small volume of a slanted cylinder of fluid swept out by the area element $\delta S$ in time $\delta t$, where $\delta S$ starts on the surface $S$ and moves with the fluid with velocity $\mathbf{u}$. In an infinitesimal time $\delta t$, the infinitesimal change (negative) in momentum within the fixed volume $V$ is
+$$-\rho\mathbf{u}(\mathbf{u}\delta t)\cdot(\mathbf{n}\delta S)$$
+Take $\delta t\rightarrow 0$ gives us the desired equation.
+\end{proof}
+\begin{thm}[Euler Equation]
+Newton's Second Law for inviscid fluid is:
+\begin{equation}
+\rho\frac{D\mathbf{u}}{Dt}=-\boldsymbol{\nabla}p+\rho\mathbf{f}\iff\rho\frac{\partial\mathbf{u}}{\partial t}+\rho\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}=-\boldsymbol{\nabla}p+\rho\mathbf{f}\label{Newton2Law}
+\end{equation}
+\end{thm}
+\begin{proof}
+Using the generalized divergence theorem to convert the surface integrals into volume integrals, i.e. $\int\rho u_iu_jn_jdS=\int\frac{\partial}{\partial x_j}\rho u_iu_jdV$:
+$$\int_V\frac{\partial}{\partial t}\rho u_i dV=\int_V\bigg(\rho f_i-\frac{\partial p}{\partial x_i}-\frac{\partial}{\partial x_j}(\rho u_iu_j)\bigg)dV$$
+Since the volume integral involves an arbitrary volume, this results in
+$$\rho\bigg(\frac{\partial u_i}{\partial t}+u_j\frac{\partial u_i}{\partial x_j}\bigg)+u_i\bigg(\frac{\partial\rho}{\partial t}+\frac{\partial}{\partial x_j}(\rho u_j)\bigg)=-\frac{\partial p}{\partial x_i}+\rho f_i\implies\rho\frac{D\mathbf{u}}{Dt}=-\boldsymbol{\nabla}p+\rho\mathbf{f}$$
+where we used conservation of mass $\frac{\partial\rho}{\partial t}+\frac{\partial}{\partial x_j}(\rho u_j)=0$.
+\end{proof}
+\begin{remarks}
+Together with the mass conservation equation ($\boldsymbol{\nabla}\cdot\mathbf{u}=0$) and a boundary condition on $\mathbf{u}\cdot\mathbf{\hat{n}}$, the foregoing equations are sufficient to determine the motion, for the incompressible, constant-density flows under consideration.
+\end{remarks}
+\begin{eg}[Pressure Force on Curved Section of Pipe]
+We assume uniform flow (inviscid and incompressible) velocity $U$ over the two circular cross sections $S_1$ and $S_2$ at the end of the impermeable pipe $(\mathbf{u}\cdot\mathbf{n}=0)$ on the curved surface $S$.
+$$\frac{d}{dt}\int_V\rho\mathbf{u}dV=\int_V\rho\mathbf{g}dV-\int_{S\cup S_1\cup S_2}\{p\mathbf{n}+\rho(\mathbf{u}\cdot\mathbf{n})\mathbf{u}\}dS$$
+where the left hand side is zero for steady flow, and $\mathbf{g}=-\boldsymbol{\nabla}\Phi$. Now since the pipe is impermeable, $\mathbf{u}\cdot\mathbf{n}=0\implies\int_S\rho(\mathbf{u}\cdot\mathbf{n})\mathbf{u}dS=0$, and that $\int_{S_1\cup S_2}p\mathbf{n}dS=Ap(\mathbf{n_1}+\mathbf{n_2})$, hence
+$$0=\int_V\rho\boldsymbol{\nabla}\Phi dV-\int_S p\mathbf{n}dS- Ap(\mathbf{n_1}+\mathbf{n_2})-A\rho U^2(\mathbf{n_1}+\mathbf{n_2})$$
+where our desired term is the second term, the pressure force on the curved surface of the pipe $S$.
+\end{eg}
+\begin{eg}[Pressure Change at an Abrupt Change in Pipe Diameter]
+Consider a composite pipe made up of a thicker and thinner pipe of cross-sectional areas $A_2$ and $A_1$ respectively. The pressure and flow velocity at the two sides are $p_2$, $U_2$, and $p_1$, $U_1$ respectively. Given $\rho$ as well, find $p_2$. Assume steady, uniform flow at each cross section. Note that for the curved surface,
+$$\mathbf{\hat{x}}\cdot\bigg[\int\rho(\mathbf{u}\cdot\mathbf{n})\mathbf{u}+p\mathbf{n}dS\bigg]=0$$
+Hence, we only need to consider $A_1$ and $A_2$:
+$$A_1\rho(-u_1)(-u_1)+A_1p_1+p_1(A_2-A_1)=A_2\rho U_2^2+A_2p_2$$
+where $p_1(A_2-A_1)$ is due to the shoulder (sudden change in area). By mass conservation,
+$$A_1U_1=A_2U_2\implies p_2-p_1=\rho\frac{A_1}{A_2}U_1^2\bigg(1-\frac{A_1}{A_2}\bigg)>0$$
+Hence, pressure increases from upstream to downstream since $A_1<A_2$.
+\end{eg}
+\begin{defi}[Stress tensor]
+In general, the surface force might not be parallel to the normal of the surface it is acting on. We thus relate the two via the stress tensor.
+\begin{equation}
+    F_i=\sigma_{ij}\hat{s}_j\label{stresstensor}
+\end{equation}
+\end{defi}
+\begin{prop}[Cauchy's Equation]
+The Cauchy's equation
+\begin{equation}
+\rho\frac{D\mathbf{u}}{Dt}=\mathbf{F}+\boldsymbol{\nabla}\cdot\sigma\label{cauchy}
+\end{equation}
+is valid for any continuum.
+\end{prop}
+\begin{proof}
+Similar to the derivation of Eqn.~\ref{momentumEqn}, consider the momentum inside a fixed arbitrary smooth volume $V$, then the rate of change of momentum in $V$ is given by the following balance
+$$\frac{d}{dt}\int_V\rho u_idV=\int_VF_idV+\oint_{\partial V}\sigma_{ij}n_jdS-\oint_{\partial V}\rho u_iu_jn_jdS$$
+where the first term on the right is the body force, second term is the surface force, while the third term is the advection into/out of domain. We first invoke Divergence theorem and since $V$ is arbitrary, we will only consider the integrand
+\begin{equation}
+\frac{\partial}{\partial t}(\rho u_i)=F_i+\frac{\partial\sigma_{ij}}{\partial x_j}-\frac{\partial}{\partial x_j}(\rho u_iu_j)\label{ram}
+\end{equation}
+Evaluating the last term on the right by product rule, we can group the relevant terms and evaluate to zero, by the continuity equation, i.e.
+$$0=\frac{\partial\rho}{\partial t}+\boldsymbol{\nabla}\cdot(\rho\mathbf{u})\implies 0=u_i\frac{\partial\rho}{\partial t}+u_i\frac{\partial}{\partial x_j}(\rho u_j)$$
+Using the definition of $\frac{D}{Dt}$, we obtain the Cauchy's equation.
+\end{proof}
+\begin{defi}[Ram pressure]
+The term $\partial_j(\rho u_ju_i)$ in Eqn.~\ref{ram} represents the change in the $i$th component of momentum due to a mismatch in $i$-momentum carried through a unit cell in each of the three orthogonal directions. $\rho u_ju_i$ is known as the ram pressure, which is the momentum flux per second in the $i$ direction through a surface with normal in the $j$ direction.
+\end{defi}
+\newpage
+\section{Gravitation}
+\begin{defi}[Gravitational potential]
+For a conservative force, we may write it as the gradient of a scalar potential. Gravity is conservative, so we define the gravitational potential to be
+\begin{equation}
+    \mathbf{g}=-\boldsymbol{\nabla}\Phi\label{gravpotential}
+\end{equation}
+The work required to take a unit mass to infinity is then
+$$-\int_{\mathbf{r}}^\infty\mathbf{g}\cdot d\mathbf{r}=\Phi(\infty)-\Phi(\mathbf{r})$$
+which is path independent (consequence of a conservative force). $\Psi(\infty)$ is usually taken to be zero, by convention.
+\end{defi}
+\begin{eg}
+For a point mass located at $\mathbf{r'}$, the potential is
+\begin{equation}
+\Phi=-\frac{GM}{|\mathbf{r}-\mathbf{r'}|}\label{potentialpointmass}
+\end{equation}
+We can generalize this to a system of point masses $M_i$ at locations $\mathbf{r_i'}$ via a linear superposition.
+\end{eg}
+\begin{prop}[Poisson's equation]
+\begin{equation}
+\nabla^2\Phi=4\pi G\rho\label{Poisson}
+\end{equation}
+\end{prop}
+\begin{proof}
+The solid angle subtended by a point P (which is surrounded by a surface $S$) by $d\mathbf{S}$ is
+$$d\Omega=\frac{d\mathbf{S}\cdot\mathbf{\hat{r}}}{r^2}$$
+If we integrate over the surface, this gives $4\pi$ or 0 if P is anywhere inside or outside $S$ respectively. Without loss of generality, we place the origin at P. The gravitational force takes the form $\mathbf{f}=\mathbf{r}/r^3$. If P is inside S, $\mathbf{f}$ is undefined at P. To invoke the divergence theorem, we place a small interior surface $S'$ around P so that P itself is excluded from the region of integration. We then have
+$$\int_S\frac{\mathbf{\hat{r}}\cdot d\mathbf{S}}{r^2}+\int_{S'}\frac{\mathbf{\hat{r}}\cdot d\mathbf{S}}{r^2}=0$$
+We could choose $S'$ to be a sphere of radius $a$, such that $\mathbf{\hat{r}}\cdot d\mathbf{S}/r^2=-4\pi$. Hence, if there is a mass $M$ at P inside $S$, then $-\int_S\mathbf{g}\cdot d\mathbf{S}=-4\pi GM$. By divergence theorem again, we have
+$$\boldsymbol{\nabla}\cdot\mathbf{g}+4\pi G\rho=0$$
+The result follows from Eqn.~\ref{gravpotential}.
+\end{proof}
+\begin{remarks}
+We would always choose a Gaussian surface that has the same symmetry of the problem.
+\end{remarks}
+\begin{eg}\leavevmode
+\begin{enumerate}
+    \item For a spherically symmetric mass distribution, choose a Gaussian surface as a sphere centred on the mass distribution. By symmetry, $\mathbf{g}$ is radial and same everywhere on the sphere. Eqn.~\ref{Poisson} gives
+    $$-4\pi GM=\int\mathbf{g}\cdot d\mathbf{S}=-4\pi r^2|\mathbf{g}|\implies \mathbf{g}=-\frac{GM(r)}{r^2}\mathbf{\hat{r}}$$
+    where $M(r)$ is the enclosed mass. For a spherical mass distribution, $\mathbf{g}$ depends only on the enclosed mass.
+    \item For an infinite cylindrically symmetric mass distribution, take $r=0$ to be the line of symmetry. By symmetry, $\mathbf{g}$ is uniform and radial on the curved sides of the cylindrical Gaussian surface of radius $R$, and zero on the flat ends. Again, Eqn.~\ref{Poisson} gives
+    $$-4\pi G M=\int\mathbf{g}\cdot d\mathbf{S}=-2\pi R\ell|\mathbf{g}|\implies\mathbf{g}=-\frac{2G}{r}\int_0^R\pi r\rho(r)dr\mathbf{\hat{r}}$$
+    For an infinite radially symmetric cylinder, $\mathbf{g}$ depends only on the mass distribution interior to it.
+    \item For an infinite planar distribution ($\rho=\rho(z)$ symmetric about $z=0$), we choose the Gaussian surface ot be a box with area $A$ and height $2z$. By symmetry, $\mathbf{g}$ is zero on the sides of the two box. Eqn.~\ref{Poisson} gives
+    $$-4\pi GM=\int\mathbf{g}\cdot d\mathbf{S}=-2|\mathbf{g}|A\implies\mathbf{g}=-4\pi G\int_0^z\rho(z')dz'\mathbf{\hat{z}}$$
+    For an infinite plane mass distribution symmetric about $z=0$, $\mathbf{g}$ depends only on the mass distribution interior to the poitn of interest.
+    \item For a finite axisymmetric disc, symmetric about $z=0$, there is no choice of Gaussian surface where $\mathbf{g}$ vanishes by symmetry arguments. $|\mathbf{g}|$ is not uniform over the top and bottom surfaces of a Gaussian pillbox. 
+\end{enumerate}
+\end{eg}
+\begin{prop}
+The gravitational potential $\Phi(r)$ of a symmetric mass distribution is affected by matter outside $r$. Specifically, suppose $M(r)/r\rightarrow 0$ as $r\rightarrow\infty$, then
+\begin{equation}
+\Phi=\bigg[-\frac{G}{r''}\int_0^{r''}4\pi\rho(r')r'^2dr'\bigg]_\infty^r+\int_\infty^r4\pi G\rho(r'')r''dr''\label{potentialspherical}
+\end{equation}
+\end{prop}
+\begin{proof}
+The acceleration $g=-\frac{d\Phi}{dr}$ is radial, so we have
+$$\Phi=\int_\infty^r\frac{G}{r''^2}\int_0^{r''}4\pi \rho(r')r'^2dr'dr''$$
+But $\Phi(\infty)=0$, integration by parts under the given assumption gives the desired result.
+\end{proof}
+\begin{remarks}
+The presence of exterior mass in a spherically symmetric distribution does not affect the accleration but does affect the potential.
+\end{remarks}
+\begin{defi}[Gravitational potential energy]
+The energy to take a system of point masses to infinity is
+\begin{equation}
+\Omega:=-\frac{1}{2}\sum_{j\neq i}\sum_i\frac{GM_iM_j}{|\mathbf{r_j}-\mathbf{r_i}|}=\frac{1}{2}\sum_jM_j\Phi_j\label{GPE1}
+\end{equation}
+where the factor of $1/2$ ensures that each pair of masses only contributes once to the energy sum. For a continuous matter distribution, this is
+\begin{equation}
+\Omega=\frac{1}{2}\int\rho(\mathbf{r})\Phi(\mathbf{r})dV\label{GPE2}
+\end{equation}
+\end{defi}
+\begin{cor}
+The gravitational potential energy of a spherical matter distribution can be computed by considering the assembly of a spherical mass distribution via the bringing in of successive shells from infinity. 
+\end{cor}
+\begin{proof}
+For a spherical mass distribution, Eqn.~\ref{GPE2} gives 
+\begin{align}
+\Omega&=\frac{1}{2}\int_0^\infty 4\pi\rho(r')r'^2\Phi(r')dr'\nonumber\\&=\frac{1}{2}\bigg\{[M(r')\Phi(r')]_0^\infty-\int_0^\infty M(r')\frac{d\Phi}{dr'}dr'\bigg\}\nonumber\\&=-\frac{1}{2}\int_0^\infty\frac{GM(r')^2}{r'^2}dr'\nonumber\\&=\frac{1}{2}\bigg[G\frac{M(r')^2}{r'}\bigg]_0^\infty-G\int_0^\infty\frac{M(r')}{r'}\frac{dM}{dr'}dr'\nonumber\\&=-G\int_0^\infty\frac{M(r')}{r'}dr'\nonumber
+\end{align}
+where $M(0)=0$ and $\Psi(\infty)=0$.
+\end{proof}
+\begin{defi}[Virial]
+We define the virial to be $V=\sum\mathbf{r}\cdot\mathbf{F}$.
+\end{defi}
+\begin{thm}[Virial theorem]
+In the absence of an external force field, and consider pair mutual forces ($F_{ij}=-F_{ji}$) like gravity, then if the system is in a steady state, it must satisfy 
+\begin{equation}
+    2T+\Omega=0\label{Virial}
+\end{equation}
+where $T$ is the total kinetic energy of motion of the particles.
+\end{thm}
+\begin{proof}
+The moment of inertia about the origin is $I=\sum mr^2$.
+\begin{align}
+    \frac{1}{2}\frac{d^2I}{dt^2}&=\frac{1}{2}\frac{d^2mr^2}{dt^2}\nonumber\\&=m\frac{d}{dt}\bigg(\mathbf{r}\cdot\frac{d\mathbf{r}}{dt}\bigg)\nonumber\\&=m\mathbf{\dot{r}}^2+\mathbf{r}\cdot\mathbf{F}\nonumber
+\end{align}
+Summing it up gives $\frac{1}{2}\frac{d^2I}{dt^2}=2T+V$. For our problem on hand, we evaluate $V$. The force between two particles of masses $m_i$ and $m_j$, at points $\mathbf{r_i}$ and $\mathbf{r_j}$, then the contribution to this pair of forces to the virial is $\mathbf{F_{ij}}\cdot(\mathbf{r_i}-\mathbf{r_j})$. In the absence of an external force field,
+$$V=\sum_i\sum_{j>i}\mathbf{F_{ij}}\cdot(\mathbf{r_i}-\mathbf{r_j})$$
+If the ideal gas laws apply (so collisional processes occur, if any, when $\mathbf{r_i}-\mathbf{r_j}=\boldsymbol{0}$), then all forces except gravity may be neglected. The virial is then $V=-\sum_i\sum_{j>i}\frac{Gm_im_j}{r_{ij}}$. This is the work done in separating the pair of particles to infinity against the gravitational attraction, i.e. $\Omega$. If the system is in a steady state, $I$ is a constant, and hence we obtain our desired result.
+\end{proof}
+\begin{remarks}
+If we were to decompose the total kinetic energy to the kinetic energy of the mean flow locally, and the additional kinetic energy stored in particle motions in the rest frame of the local fluid element, then virial theorem can be equivalently written as
+$$2T_k+3(\gamma-1)U+\Omega=0$$
+where $T_k$ is the total kinetic energy contained in the mean streaming motion of the particles at every point. $U$ is the thermal energy of the fluid and ratio of specific heats is $\gamma$.
+\end{remarks}
+
+
+
+
+\newpage
+
+\section{Energy equation}
+\subsection{Barotropic equation of state}
+To solve the continuity equation and momentum equation, we require additional relations which gives us $\Phi$ and $\rho$ in terms of the other variables $\rho$ and $\mathbf{u}$. These are the Poisson's equation (Eqn.~\ref{Poisson}) and the equation of state.
+\begin{defi}[Equation of state]
+For a collisional fluid (it achieves the maximal entropy state via interactions), one can define an equation of state, relating its thermodynamic state variables.
+\end{defi}
+\begin{eg}[Ideal gas]
+The equation of state of an ideal gas is given by
+\begin{equation}
+    p=\frac{\mathcal{R}_*}{\mu}\rho T\label{ideal}
+\end{equation}
+where $\mathcal{R}_*=8300$ Joules per molecular weight of the substance, is the modified gas constant, and $\mu$ the mean molecular weight (in kilograms) of the constituents of the gas. $T$ is the temperature of the gas, which relates to the internal energy content of the fluid, which is in turn determined by an equation that takes account of the various heat input and heat loss mechanisms in the fluid.
+\end{eg}
+\begin{eg}[Barotropic fluids]
+Barotropic fluids have an equation of state which pressure is a function of density only $p=p(\rho)$.
+\begin{enumerate}
+    \item An isothermal equation of state implies that temperature $T$ is a constant. For an ideal gas, $p\propto\rho$. For the isothermal approximation to be a good one, it is necessary that in thermal equilibrium, the heating and cooling processes thermostatically control the temperature to lie within a narrow range.
+    \item An adiabatic ideal gas is one which undergoes reversible changes.
+\end{enumerate}
+\end{eg}
+\begin{defi}[First law of thermodynamics]
+By energy conservation, the quantity of heat absorbed by unit mass of fluid from its surroundings ($\dbar Q$) is equal to the sum of $pdV$ (the work done per unit mass of fluid if its volume changes by $dV$) and the change in the internal energy content of unit mass of the fluid $d\mathcal{E}$.
+\begin{equation}
+    \dbar Q=d\mathcal{E}+pdV\label{firstlaw}
+\end{equation}
+This law is only valid if one can neglect viscous or dissipative processes that can convert the kinetic energy of the fluid into heat.
+\end{defi}
+\begin{notation}
+Pfaffian operators $\dbar$ denotes that the change in quantities in going from an initial state to a final one depends on the route taken through thermodynamic phase space.
+\end{notation}
+\begin{prop}
+For an adiabatic ideal gas, the equation of state is
+\begin{equation}
+    p\propto\rho^\gamma\label{adiabatic}
+\end{equation}
+where $\gamma=C_p/C_v$ is the ratio of heat capacities.
+\end{prop}
+\begin{proof}
+For an ideal gas, the energy equation is
+$$\dbar Q=\frac{d\mathcal{E}(T)}{dT}dT+pdV=C_VdT+\frac{\mathcal{R}_*T}{\mu V}dV$$
+For a gas undergoing a reversible adiabatic change, $\dbar Q=0\implies V\propto T^{-C_V\mu/\mathcal{R}_*}$. With the ideal gas equation of state, we have $p\propto T^{1+(C_V\mu/\mathcal{R}_*)}\propto V^{-1+(\mathcal{R}_*/\mu C_V)}$. We could have also written the energy equation as
+$$\dbar Q=\bigg(\frac{d\mathcal{E}(T)}{dT}+\frac{\mathcal{R}_*}{\mu}\bigg)dT-Vdp$$
+using the ideal gas equation (Eqn.~\ref{ideal}). It then follows that $C_p=\frac{d\mathcal{E}}{dT}+\frac{\mathcal{R}_*}{\mu}$, and hence $C_p-C_V=\frac{\mathcal{R}_*}{\mu}$. Define the ratio of specific heats $\gamma=C_p/C_V$, then $V\propto T^{-1/(\gamma-1)}$, $p\propto T^{\gamma/(\gamma-1)}\propto V^{-\gamma}$. Hence, $p\propto\rho^\gamma$. 
+\end{proof}
+\newpage
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item The actual value of $C_V$ depends on the number of ways that the gas can store kinetic energy. The specific heat capacity of an ideal gas is $\mathcal{R}_*/2\mu$ times the number of degrees of freedom in the gas (the number of independent energy terms involving quadratic functions of phase space coordinates such as position or velocity). If the gas is monatomic, $c_V=3\mathcal{R}_*/2\mu$. If the gas is diatomic (with two rotational modes excited at temperatures of a few hundred degrees), $c_V=5\mathcal{R}_*/2\mu$. At any temperature, each of the independent kinetic and potential energy terms associated with molecular vibration and rotation contributes a further $\mathcal{R}_*/2\mu$ to the specific heat capacity at constant volume, provided that these motions are excited at the temperature concerned.
+\item Let the proportionality constant in Eqn.~\ref{adiabatic} be $K$. A fluid element behaves adiabatically if $K$ is constant as the element's properties change, whereas an isentropic fluid is one in which all elements have the same value of entropy per unit mass.
+\end{enumerate}
+\end{remarks}
+\subsection{Energy transport}
+There are various ways to transport heat into and out of fluid elements. Apart from conduction, convection and radiation, the energy may also leave or enter spatially fixed elements as a result of advection of heat with the fluid flow.
+\begin{eg}[Cosmic rays]
+Cosmic rays (CR) consist of highly energetic particles which stream through the galaxy. When they pass through an interstellar cloud they can ionise atoms and the excess energy in the freed electron ends up as heat. The rate of ionization per unit volume is
+\begin{equation}
+    L_{\text{CR}}\propto\rho j \label{ionizationCR}
+\end{equation}
+where $\rho$ is the density of material and $j$ is the flux of cosmic rays. Since the cosmic ray flux within an atomic cloud does not depend on the location within the cloud, the cosmic ray heating rate per unit mass is effectively constant.
+\end{eg}
+\begin{eg}[Conduction]
+Conduction occurs in the interiors of white dwarfs and the shock fronts induced by the expansion of supernovae into the interstellar medium. The heat flux per unit area is
+$$\mathbf{F_{\text{cond}}}=-K\boldsymbol{\nabla}T$$
+where $K$ is the thermal conductivity (W m$^{-1}$ K$^{-1}$). For an ideal gas, $K$ is related ot the collision cross-section $\sigma$ and thermal velocity, i.e. $K\approx C_V(mk_BT/3)^{1/2}\sigma$ where $m$ is the particle mass. Low $\sigma$ favours conduction since particles travel a long way between collisions and hence transfer heat over large distances. The rate of change of energy per unit volume due to conduction is simply $\boldsymbol{\nabla}\cdot \mathbf{F_{\text{cond}}}$.
+\end{eg}
+\begin{eg}[Convection]
+Convection is the transfer of energy by fluid flows which are set up by gravity in the presence of temperature gradients. It is important in the cores of massive stars and the envelopes of low mass stars. Convection currents arise when a fluid cell is unstable against small displacements, and its motion then carries associated thermal energy, mixing hotter material with cold and effecting a net transfer of energy from hot to cold.
+\end{eg}
+\begin{eg}[Radiation]
+In the optically thick limit, the emitted photons (which carry heat) are reabsorbed or scattered locally and have to escape to infinity only after diffusing outwards through the medium. In contrast, in the optically thin limit, photons are able to escape to infinity as the overlying material is nearly transparent to the emitted radiation. The various loss processes are
+\begin{enumerate}
+    \item energy loss by recombination: for Hydrogen, the energy lost by free electrons per unit volume per unit time is
+    $$L_{\text{recomb}}=n_en_pk_BT\beta(H^0,T)$$
+    where $n_e$ is the electron number density, $n_p$ is the proton number density and $k_BT\beta(H^0,T)$ is the product of the particle kinetic energy, recombination cross-section and velocity all averaged over particle velocities.
+    \item energy loss by free-free radiation: occurs when an electron is accelerated as it passes close to a charged particle of charge $Z$ and results in an energy loss
+    $$L_{\text{ff}}=1.42\times10^{-40}Z^2\sqrt{T}g_{\text{ff}}n_en_p$$
+    in units of W m$^{-3}$, where $g_{\text{ff}}$ is weakly temperature dependent, and may be taken to be unity.
+    \item collisionally excited atomic line radiation: energy loss dominated by electron collisions of atoms in the ground state which give rise to excitation to a low-lying energy level, and the atom then returns to the ground state by emitting a photon (of energy $\chi$) which takes away the excitation energy, effectively radiating away the electron's kinetic energy. The cooling rate per unit volume per unit time for line radiation from a given energy level for a particular species is
+    $$L_c=n_{\text{ion}}n_e e^{-\chi/k_BT}\chi\frac{8.6\times10^{-12}}{\sqrt{T}}\omega$$
+    in units of W m$^{-3}$. Since collisions are involved in the excitation process, we require both ion and electron densities.
+\end{enumerate}
+\end{eg}
+\begin{prop}
+\begin{equation}
+    \dot{Q}_{\text{cool}}=A\rho T^\alpha-H\label{cooling}
+\end{equation}
+\end{prop}
+\begin{proof}
+Since the cooling rate per unit volume in the optically thin case commonly scales as the square of the density, it then follows that the cooling rate per unit mass scales linearly with density, i.e. $A\rho T^\alpha$ over some limited temperature range. $A$ and $\alpha$ (depends upon the physics of the dominant radiative cooling process) are constants. In dense clouds, the photon flux is essentially zero, so cosmic rays provide almost all the heating, and so the heating rate per unit mass is approximately constant.
+\end{proof}
+\subsection{Energy equation}
+\begin{prop}[Energy equation]
+\begin{equation}
+    \frac{\partial E}{\partial t}+\boldsymbol{\nabla}\cdot[(E+p)\mathbf{u}]=-\rho(A\rho T^\alpha-H)+\rho\frac{\partial\Phi}{\partial t}\label{energyeqn}
+\end{equation}
+\end{prop}
+\begin{proof}
+In the Lagrangian picture, the first law is $D\mathcal{E}/Dt=\dbar W/dt+\dbar Q/dt$. But
+$$\frac{DW}{Dt}=-p\frac{D(1/\rho)}{Dt}=\frac{p}{\rho^2}\frac{D\rho}{Dt},\quad\frac{D\mathcal{E}}{Dt}=\frac{p}{\rho^2}\frac{D\rho}{Dt}-\dot{Q}_{\text{cool}}$$
+Define the total energy per unit volume to be $E=\rho(0.5 u^2+\Phi+\mathcal{E})$, where the individual terms are kinetic energy, potential energy and internal energy. So we have
+\begin{align}
+    \frac{DE}{Dt}&=\frac{E}{\rho}\frac{D\rho}{Dt}+\rho\bigg(\mathbf{u}\cdot\frac{D\mathbf{u}}{Dt}+\frac{D\Phi}{Dt}+\frac{p}{\rho^2}\frac{D\rho}{Dt}-\dot{Q}_{\text{cool}}\bigg)\nonumber\\&=-\frac{E}{\rho}\rho\boldsymbol{\nabla}\cdot\mathbf{u}+\mathbf{u}\cdot(-\boldsymbol{\nabla}p-\rho\boldsymbol{\nabla}\Phi)+\rho\frac{\partial\Phi}{\partial t}+\rho\mathbf{u}\cdot\boldsymbol{\nabla}\Phi-\rho\frac{p}{\rho^2}\rho\boldsymbol{\nabla}\cdot\mathbf{u}-\rho(A\rho T^\alpha-H)\nonumber\\&=-E\boldsymbol{\nabla}\cdot\mathbf{u}-\mathbf{u}\cdot\boldsymbol{\nabla}p-\rho\mathbf{u}\cdot\boldsymbol{\nabla}\Phi+\rho\frac{\partial\Phi}{\partial t}+\rho\mathbf{u}\cdot\boldsymbol{\nabla}\Phi-\rho\boldsymbol{\nabla}\cdot\mathbf{u}-p(A\rho T^\alpha-H)\nonumber\\&=-E\boldsymbol{\nabla}\cdot\mathbf{u}-\boldsymbol{\nabla}\cdot(p\mathbf{u})+\rho\frac{\partial\Phi}{\partial t}-\rho(A\rho T^\alpha-H)\nonumber
+\end{align}
+but $\frac{DE}{Dt}=\frac{\partial E}{\partial t}+\mathbf{u}\cdot\boldsymbol{\nabla}E$.
+\end{proof}
+\newpage
+\section{Hydrostatic equilibrium}
+\subsection{Basic examples}
+\begin{defi}[Hydrostatic equilibrium]
+Hydrostatic equilibrium is the condition of a fluid at rest, i.e. $u=0$ everywhere and $\partial/\partial t=0$.
+\end{defi}
+\begin{prop}[Hydrostatic equilibrium equation]
+\begin{equation}
+\frac{1}{\rho}\boldsymbol{\nabla}p=-\boldsymbol{\nabla}\Phi\label{hydrostaticeqm}
+\end{equation}
+\end{prop}
+\begin{proof}
+Use Eqn.~\ref{momentumEqn} and set $\partial u/\partial t=0$ and $u=0$.
+\end{proof}
+\begin{eg}[Isothermal slab]
+We consider an infinite (in $x$ and $y$) static isothermal slab, symmetric about $z=0$, supported by gas pressure and under its own self-gravity. Using the ideal gas relation (Eqn.~\ref{ideal}) and hydrostatic equilibrium condition (Eqn.~\ref{hydrostaticeqm}),
+$$\frac{\mathcal{R}_*}{\mu}T\frac{d}{dz}\ln\rho=-\frac{d\Phi}{dz}\implies\Phi=-A\ln\frac{\rho}{\rho_0}+\Phi_0\implies\rho=\rho_0e^{-\frac{\mu}{\mathcal{R}_*T}(\Phi-\Phi_0)}$$
+where the subscript 0 represent quantities at $z=0$. Now, we use Poisson's equation to find the $z$ dependence.
+$$\frac{d^2\Phi}{dz^2}=4\pi G\rho_0e^{-\frac{\mu}{\mathcal{R}_*T}(\Phi-\Phi_0)}\implies\frac{d^2\chi}{dZ^2}=-2e^\chi$$
+where we change variables to $\chi=-\frac{\mu}{\mathcal{R}_*T}(\Phi-\Phi_0)$ and $Z=\sqrt{2\pi G\rho_0\mu/\mathcal{R}_*T}z$ (dimensionless). The boundary conditions are $\chi(Z=0)=0$. If we further assume $z=0$ is the plane of symmetry, then $\frac{d\chi}{dZ}|_{Z=0}=0$. To solve the equation, consider
+$$\frac{d\chi}{dZ}\frac{d^2\chi}{dZ^2}=-2\frac{d\chi}{dZ}e^\chi\implies\bigg(\frac{d\chi}{dZ}\bigg)^2=c_1-4e^\chi$$
+where the boundary conditions at $Z=0$ gives the integration constant $c_1=4$. Finally, we have to solve $\frac{d\chi}{dZ}=2\sqrt{1-e^\chi}$. Try the substitution $s^2=e^\chi$, to get
+$$\int2 dZ=\int\frac{d\chi}{\sqrt{1-e^\chi}}=\int\frac{2ds}{s\sqrt{1-s^2}}=2\int\frac{d\theta}{\sin\theta}=2\int\frac{dt}{t}=2\ln t$$
+where we used further substitutions $s=\sin\theta$ and $t=\tan(\theta/2)$. Again, invoking the boundary conditions gives
+$$t=e^Z\implies s=e^{\chi/2}=\frac{1}{\cosh Z}\implies\Phi-\Phi_0=2A\ln\cosh\sqrt{\frac{2\pi G\rho_0\mu}{\mathcal{R}_*T}}z\implies\rho=\frac{\rho_0}{\cosh^2\sqrt{\frac{2\pi G\rho_0\mu}{\mathcal{R}_*T}}z}$$
+Treat the Earth's atmosphere as an isothermal plane where $g$ is constant ($1/r^2$ effects are small near to the surface). We then have
+$$\frac{\mathcal{R}_*T}{\mu}\frac{1}{\rho}\frac{d\rho}{dz}=-g\implies\rho=\rho_0\exp(-\mu gz/\mathcal{R}_*T)$$
+For $T\sim 300$ K and $\mu\sim 28$, the e-folding height $\mathcal{R}_*T/\mu g$ is about 9 km.
+\end{eg}
+\newpage
+\subsection{Lane-Emden equation}
+\begin{prop}[Lane-Emden equation of index $n$]
+Consider stars as spherical and in hydrostatic equilibrium, then it satisfies
+\begin{equation}
+    \frac{1}{\xi^2}\frac{d}{d\xi}\bigg(\xi^2\frac{d\theta}{d\xi}\bigg)=-\theta^n\label{LaneEmden}
+\end{equation}
+where $\theta=\frac{\Phi_T-\Phi}{\Phi_T-\Phi_c}$ and $\xi=\sqrt{\frac{4\pi G\rho_c}{\Phi_T-\Phi_c}}r$.
+\end{prop}
+\begin{proof}
+Apply hydrostatic equilibrium (Eqn.~\ref{hydrostaticeqm}) in spherical polars:
+$$\frac{dp}{dr}=-\rho\frac{d\Phi}{dr}$$
+Since $\rho>0$ within the star, $p$ is a monotonic function of $\Phi$, and we may write $p=p(\Phi)$, so
+$$\rho=-\frac{dp}{d\Phi}\implies \rho=\rho(\Phi)$$
+This suggests the barotropic equation of state $\rho=\rho(p)$. We can additionally assume that $\rho$ is a monotonic function of $p$, i.e. parametrize the relation
+\begin{equation}
+p=K\rho^{1+(1/n)}\label{polytrope}
+\end{equation}
+where $n$ is the polytropic index. The hydrostatic equilibrium equation gives
+$$-\boldsymbol{\nabla}\Phi=\frac{1}{\rho}\boldsymbol{\nabla}K\rho^{1+(1/n)}=(n+1)\boldsymbol{\nabla}(K\rho^{1/n})\implies\rho=\bigg(\frac{\Phi_T-\Phi}{(n+1)K}\bigg)^n$$
+where we define $\Phi_T$ as the potential at the surface of the star ($\rho=0$). Additionally, we define $\rho_c$ and $\Phi_c$ at the centre of the star: $\rho=\rho_c(\frac{\Phi_T-\Phi}{\Phi_T-\Phi_c})^n$. Next, we use the Poisson's equation (Eqn.~\ref{Poisson}):
+$$\nabla^2\Phi=4\pi G\rho_c\bigg(\frac{\Phi_T-\Phi}{\Phi_T-\Phi_c}\bigg)^n\implies\nabla^2\theta=-\frac{4\pi G\rho_c}{\Phi_T-\Phi_c}\theta^n$$
+where we substituted $\theta:=\frac{\Phi_T-\Phi}{\Phi_T-\Phi_c}\implies\Phi=-(\Phi_T-\Phi_c)\theta+\Phi_T$. In spherical polars (and spherical symmetry), $\nabla^2=\frac{1}{r^2}\frac{d}{dr}(r^2\frac{d}{dr})$. Finally, remove the dimensions of $r$ via $\xi:=\sqrt{\frac{4\pi G\rho_c}{\Phi_T-\Phi_c}}r$, to obtain the desired equation.
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item The adiabatic constant $\gamma$ is not necessarily equal to the polytropic power law $1+(1/N)$ in general.
+\item The boundary conditions are $\theta(\xi=0)=1$ and $\frac{d\theta}{d\xi}|_{\xi=0}=0$ (i.e. zero force at $\xi=0$).
+\end{enumerate}
+\end{remarks}
+\begin{cor}[$n=0$ solution]
+$$\theta_0=1-\frac{1}{6}\xi^2$$
+\end{cor}
+\begin{proof}
+Eqn.~\ref{LaneEmden} for $n=0$ is
+$$\frac{1}{\xi^2}\frac{d}{d\xi}\bigg(\xi^2\frac{d\theta}{d\xi}\bigg)=-1\implies\xi^2\frac{d\theta}{d\xi}=-\frac{1}{3}\xi^3-C\implies\theta=D+\frac{C}{\xi}-\frac{1}{6}\xi^2$$
+The solution has a singularity at the origin, and $\theta\rightarrow C/\xi$ as $\xi\rightarrow 0$. However, the boundary conditions at $\xi=0$ are $\theta=1$ and $\frac{d\theta}{d\xi}=0$, hence $C=0$ and $D=1$. 
+\end{proof}
+\begin{cor}[$n=1$ solution]
+$$\theta_1=\sin\xi/\xi$$
+\end{cor}
+\begin{proof}
+Eqn.~\ref{LaneEmden} for $n=1$ is
+$$\frac{1}{\xi^2}\frac{d}{d\xi}\bigg(\xi^2\frac{d\theta}{d\xi}\bigg)=-\theta\implies\frac{d^2\chi}{d\xi^2}=-\chi\implies\chi=A\sin(\xi+B)=\xi\theta$$
+where we substituted $\theta:=\chi/\xi$ and $A$ and $B$ are integration constants. The boundary conditions require $A=1$ and $B=0$.
+\end{proof}
+\begin{cor}[$n=5$ solution]
+$$\theta_5=\frac{1}{\sqrt{1+(\xi^2/3)}}$$
+\end{cor}
+\begin{proof}
+Eqn.~\ref{LaneEmden} for $n=5$ is
+$$\frac{1}{\xi^2}\frac{d}{d\xi}\bigg(\xi^2\frac{d\theta}{d\xi}\bigg)=-\theta^5\implies x^4\frac{d^2\theta}{dx^2}=-\theta^5\implies\frac{d^2z}{dt^2}=\frac{1}{4}z(1-z^4)\implies\frac{1}{2}\bigg(\frac{dz}{dt}\bigg)^2=\frac{1}{8}z^2-\frac{1}{24}z^6+D$$
+where we substituted $x=1/\xi$ and further $t=\ln x$ and $\theta=(\frac{2(n-3)}{(n-1)^2})^{1/(n-1)}x^{2/(n-1)}z$. The integration constant $D=0$ from the boundary conditions. The final integrated result is $\frac{1}{3}z^4=\sin^2\phi$ and hence we can find $\theta_5$.
+\end{proof}
+\begin{prop}[Isothermal spheres]
+For isothermal spheres, we have 
+$$\frac{1}{\xi^2}\frac{d}{d\xi}\bigg(\xi^2\frac{d\psi}{d\xi}\bigg)=e^{-\psi}$$
+where $\rho=\rho_ce^{-\psi}$ and $r=\sqrt{\frac{K}{4\pi G\rho_c}}\xi$.
+\end{prop}
+\begin{proof}
+The equation of state for the isothermal gas sphere is $p=K\rho$. Using Eqn.~\ref{hydrostaticeqm} again, we have
+$$K\frac{1}{r^2}\frac{d}{dr}\bigg(\frac{r^2}{\rho}\frac{d\rho}{dr}\bigg)=-4\pi G\rho$$
+The desired result is obtained from the suggested substitution.
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+    \item $\rho_c$ is chosen as the central density, so $\psi(\xi=0)=0$ and the other condition is that $\frac{d\psi}{d\xi}=0$ at $\xi=0$.
+    \item At large radii, however, the solution (even after subjecting to the above boundary conditions) tends to $\rho\propto r^{-2}$, i.e. the mass tends to infinity at infinite radius (for an isothermal sphere of self-gravitating gas). For finite mass, we thus need to truncate at some radius, and may still exist in hydrostatic equilibrium if they are embedded in an external medium of appropriate pressure. 
+\end{enumerate}
+\end{remarks}
+\newpage
+\subsection{Scaling relations}
+One can treat all stars characterized by a given polytropic index $n$ as belonging to a `family', distinguished from each other by the single parameter $\rho_c$. By finding how the mass of the star and its radius vary as functions of $\rho_c$, we can eliminate $\rho_c$ and discover a scaling relationship between masses and raddi for such stars.
+\begin{prop}
+For a polytropic star, the mass and radius are related via a scaling relation
+\begin{equation}
+    M\propto R^{\frac{3-n}{1-n}}\label{polytropicstar}
+\end{equation}
+\end{prop}
+\begin{proof}
+We further assume stars in a particular family share the same value of polytropic constant $K$ (Eqn.~\ref{polytrope}). For any polytropic of a given $n$, there is a particular value of $\xi$ at which $\theta=0$, i.e. $\xi_{\text{max}}$. The total mass of the star is
+$$M=\int_0^{r_{\text{max}}}4\pi\rho r^2dr=4\pi\rho_c\bigg(\frac{4\pi G\rho_c^{1-(1/n)}}{K(n+1)}\bigg)^{-3/2}\int_0^{\xi_{\text{max}}}\theta^n\xi^2d\xi\propto\rho_c^{0.5((3/n)-1)}$$
+where $\xi=\sqrt{\frac{4\pi G\rho_c}{\Phi_T-\Phi_c}}r=\sqrt{\frac{4\pi G\rho_c^{1-(1/n)}}{K(n+1)}}r\implies R\propto\rho_c^{0.5((1/n)-1)}$. Hence, $M\propto R^{(3-n)/(1-n)}$.
+\end{proof}
+\begin{remarks}
+All stars with a given value of $n$ have the same $\theta(\xi)$. In the derivation of Eqn.~\ref{LaneEmden}, $\rho_c$ is not involved. Hence, this scaling relationship is always true.
+\end{remarks}
+\begin{cor}
+For an adiabatic star, the mass and radius are related via a scaling relation
+\begin{equation}
+    M\propto R^{-3}\label{adiabaticstar}
+\end{equation}
+\end{cor}
+\begin{proof}
+For an adiabatic star, we have $1+\frac{1}{n}=\gamma$. But, for a monatomic gas, $\gamma=5/3\implies n=3/2$, hence $M\propto R^{(3-(3/2))/(1-(3/2))}=R^{-3}$.
+\end{proof}
+\begin{remarks}
+The more massive star is smaller, which contradicts with observations ($M\propto R$). In comparison, an incompressible star ($\rho$ independent of $p$ hence $n=0$) has $M\propto R^3$. The reason for the contradiction is because all stars do not share a common polytropic constant $K$.
+\end{remarks}
+\begin{prop}
+For a main sequence star, the mass and radius are related via a scaling relation
+\begin{equation}
+    M\propto R\label{mainsequencestar}
+\end{equation}
+\end{prop}
+\begin{proof}
+Combine the polytropic equation of star (Eqn.~\ref{polytrope}) and the ideal gas equation (Eqn.~\ref{ideal}), we have
+$$T_c=\frac{\mu K}{\mathcal{R}_*}\rho_c^{1/n}$$
+In reality, nuclear reactions in the core of a main sequence star keeps the value of the central temperature rather similar (even in stars of different masses). Hence, $K$ must vary but $T_c$ kept constant. We have $K\propto\rho_c^{-1/n}$. To proceed, we find their dependence on $\rho_c$ and then eliminate $\rho_c$.
+$$M=4\pi\rho_c\bigg(\frac{K(n+1)}{4\pi G\rho_c^{1-(1/n)}}\bigg)^{3/2}\int_0^{\xi_{\text{max}}}\theta^n\xi^2d\xi\propto\rho_c^{-1/2},\quad R=\sqrt{\frac{K(n+1)}{4\pi G\rho_c^{1-(1/n)}}}\xi_{\text{max}}\propto\rho_c^{-1/2}\implies M\propto R$$
+\end{proof}
+\begin{remarks}
+The assumption of constant $K$ is true if we were to consider the effect of adding mass to a given star. Initially, the star may re-adjust to the addition of mass by attaining a new hydrostatic equilibrium but on a timescale sufficiently short, this happens adiabatically. Of course, if the star is isentropic (fully convective), then the new structure would also be isentropic (same $K$) even if this does not happen adiabatically. Here, the scaling relation Eqn.~\ref{polytropicstar} is still relevant.
+\end{remarks}
+\begin{eg}
+Consider a spherical star rotating with angular velocity $\Omega$, on which is dropped a small amount of non-rotating gas. By conservation of angular momentum and Eqn.~\ref{polytropicstar}:
+$$\frac{\Delta\Omega}{\Omega}=-\frac{\Delta(MR^2)}{MR^2}\propto\Delta M^{(5-3n)/(3-n)}\propto-\frac{(5-3n)}{3-n}\Delta M$$
+Since $\Delta M>0$, we have $\Delta\Omega<0$ if $\frac{5-3n}{3-n}>0$ and $\Delta\Omega<0$ if $\frac{5-3n}{3n}<0$. One example of this scenario is a star in a binary system where the mass transfer can occur if the binary partner expands beyond the critical equipotential, hence depositing mass through the saddle point.
+\end{eg}
+\newpage
+\section{Propagation of sound waves}
+\begin{defi}[Lagrangian versus Eulerian perturbations]
+Perturbations that apply to individual fluid elements are Lagrangians whereas if applied at a given location, they are Eulerian. Consider property X of the flow, then the perturbation causes its value at a point P to change from its unperturbed state for two reasons:
+\begin{enumerate}
+    \item the perturbation may have changed the value of $X$ of the local fluid element;
+    \item the perturbation may have moved a fluid element with a different unperturbed value of X so as to be located at point P.
+\end{enumerate}
+If the (small) displacement of a fluid element at P is denoted by the vector $\boldsymbol{\xi}$ then, to first order in small quantities, the change in X at point P is given by the sum of these contributions
+$$\delta X=\Delta X-\boldsymbol{\xi}\cdot\boldsymbol{\nabla}X$$
+where $\Delta$ and $\delta$ represent Lagrangian and Eulerian perturbations respectively.
+\end{defi}
+\subsection{Uniform medium}
+\begin{prop}
+\begin{equation}
+    \frac{\partial^2\Delta\rho}{\partial t^2}=\frac{dp}{d\rho}\nabla^2\Delta\rho\label{waveeqn}
+\end{equation}
+\end{prop}
+\begin{proof}
+ In the absence of external forces, the unperturbed state of the fluid (which is in equilibrium) is one of uniform density $\rho_0$, pressure $p_0$ and zero velocity $\mathbf{u}=\boldsymbol{0}$. We then consider the perturbation to this equilibrium:
+$$p=p_0+\Delta p,\quad\rho=\rho_0+\Delta\rho,\quad\mathbf{u}=\Delta\mathbf{u}$$
+To first order of the Lagrangian perturbations, Eqn.~\ref{continuity1} and Eqn.~\ref{momentumEqn} give respectively:
+$$\frac{\partial\Delta\rho}{\partial t}+\rho_0\boldsymbol{\nabla}\cdot\Delta\mathbf{u}=0,\quad\frac{\partial\Delta\mathbf{u}}{\partial t}=-\frac{1}{\rho_0}\boldsymbol{\nabla}\Delta p=-\frac{dp}{d\rho}\frac{\boldsymbol{\nabla}\Delta\rho}{\rho_0}$$
+where the equations can be combined to obtain Eqn.~\ref{waveeqn}.
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item Eqn.~\ref{waveeqn} is the wave equation with solution $\Delta\rho=\Delta\rho_0e^{i(kx-\omega t)}$ where $\omega$ is the angular frequency and $k$ is the wavenumber, and the wave speed $c_s=\sqrt{dp/d\rho}$. Sound waves propagate due to an interplay between density and velocity variations effected through the pressure term, i.e. longitudinal wave. The density perturbation gives rise to a pressure gradient, which then causes accelerations of the fluid elements. The resulting fluid velocities then induce further density perturbations and the disturbance propagates. 
+\item The velocity of the perturbation is
+$$\Delta u=\frac{\Delta\rho_0}{\rho_0}\frac{\omega}{k}e^{i(kx-\omega t)}$$
+i.e. the fluid velocity and density perturbation are in phase (the ratio of the two is a real number). But since we are only considering first order perturbations, $\Delta u_0<<c_s$, i.e. the disturbance propagates at a speed that far exceeds the speeds of individual fluid elements.
+\end{enumerate}
+\end{remarks}
+\begin{eg}\leavevmode
+\begin{enumerate}
+    \item Isothermal case: Isothermal sound waves occur if there is time over the timescale $1/\omega$ (where fluid element executes its oscillation) for the rarefactions and compressions to pass heat to each other and so maintain a constant temperature. For ideal gas, $c_s=\sqrt{\mathcal{R}_*T/\mu}$.
+    \item Adiabatic case: heat transfer timescale far longer compared with $1/\omega$. The compressions heat up and the rarefactions cool from $pdV$ work. For ideal gas, $c_s=\sqrt{\gamma\mathcal{R}_*T/\mu}$. 
+\end{enumerate}
+\end{eg}
+\newpage
+\subsection{Stratified atmosphere}
+\begin{prop}
+The wave equation in a stratified medium $\rho_0(z)\propto e^{-z/H}$ for some length scale $H$ is \begin{equation}
+    \frac{\partial^2\Delta\rho}{\partial t^2}-c_u^2\frac{\partial^2\Delta\rho}{\partial z^2}-\frac{c_u^2}{H}\frac{\partial\Delta\rho}{\partial z}=0\label{waveeqn2}
+\end{equation}
+\end{prop}
+\begin{proof}
+Consider sound waves propagating in an isothermal atmosphere with constant gravity $g$ acting in the $-z$ direction. Evidently, horizontal sound waves are unaffected by gravity. Consider equilibrium (subscript 0), $u_0=0$, $p_0(z)=\tilde{p}e^{-z/H}$ and $\rho_0(z)=\tilde{\rho}e^{-z/H}$, where the scale height for the isothermal atmosphere is $H=\frac{\mathcal{R}_*T}{g\mu}$. Perturb the medium
+$$\mathbf{u}\rightarrow\Delta\mathbf{u},\quad\rho_0\rightarrow\rho_0+\Delta\rho,\quad p_0\rightarrow p_0+\Delta p$$
+Consider the Lagrangian displacement $\boldsymbol{\xi}$, then
+$$\Delta\mathbf{u}=\frac{d\boldsymbol{\xi}}{dt}=\frac{\partial\boldsymbol{\xi}}{\partial t}+\mathbf{u}\cdot\boldsymbol{\nabla}\boldsymbol{\xi}=\frac{\partial\boldsymbol{\xi}}{\partial t}$$
+where in the present case, the unperturbed velocity is zero. To first order, Lagrangian version of Eqn.~\ref{continuity1} becomes
+$$0=\Delta\rho+\rho\boldsymbol{\nabla}\cdot\frac{\partial\boldsymbol{\xi}}{\partial t}\Delta t=\Delta\rho+\rho\boldsymbol{\nabla}\cdot\boldsymbol{\xi}$$
+The Eulerian perturbations are $\delta\mathbf{u}=\Delta\mathbf{u}$, $\delta\rho=\Delta\rho-\xi_z\frac{\partial p_0}{\partial z}$ and $\delta p=\Delta p-\xi_z\frac{\partial p_0}{\partial z}$. The continuity equation Eqn.~\ref{continuity1} becomes
+$$0=\frac{\partial\Delta\rho}{\partial t}-\Delta u_z\frac{\partial\rho_0}{\partial z}+\Delta u_z\frac{\partial\rho_0}{\partial z}+\rho_0\frac{\partial\Delta u_z}{\partial z}=\frac{\partial\Delta\rho}{\partial t}+\rho_0\frac{\partial\Delta u_z}{\partial z}$$
+Similarly, Eqn.~\ref{momentumEqn} becomes
+\begin{align}
+\frac{\partial\Delta u_z}{\partial t}&=\frac{-1}{\rho_0+\Delta\rho-\xi_z\frac{\partial p_0}{\partial z}}\frac{\partial }{\partial z}\bigg(p_0+\Delta p-\xi_z\frac{\partial p_0}{\partial z}\bigg)\nonumber\\&=\frac{1}{\rho_0^2}\bigg(\Delta\rho-\xi_z\frac{\partial\rho_0}{\partial z}\bigg)\frac{\partial p_0}{\partial z}-\frac{1}{\rho_0}\frac{\partial\Delta p}{\partial z}+\frac{\xi_z}{\rho_0}\frac{\partial^2p_0}{\partial z^2}-\frac{\Delta\rho}{\rho_0^2}\frac{\partial p_0}{\partial z}\nonumber\\&=-\frac{1}{\rho_0}\frac{\partial\Delta p}{\partial z}=-\frac{c_u^2}{\rho_0}\frac{\partial\Delta\rho}{\partial z}\nonumber
+\end{align}
+where we used the barotropic equation of state ($p=p(\rho)$) where $c_u=\sqrt{dp/d\rho}$ is the usual sound speed in the case of a uniform medium. Combine this result with that from the continuity equation, then
+$$0=\frac{\partial^2\Delta\rho}{\partial t^2}+\rho_0\frac{\partial}{\partial z}\frac{\partial\Delta u_z}{\partial t}=\frac{\partial^2\Delta\rho}{\partial t^2}-c_u^2\frac{\partial^2\Delta\rho}{\partial z^2}+\frac{c_u^2}{\rho_0}\frac{\partial\rho_0}{\partial z}\frac{\partial\Delta\rho}{\partial z}=\frac{\partial^2\Delta\rho}{\partial t^2}-c_u^2\frac{\partial^2\Delta\rho}{\partial z^2}-\frac{c_u^2}{H}\frac{\partial\Delta\rho}{\partial z}$$
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item If the unperturbed atmosphere is isothermal, and if the perturbations are either isothermal or adiabatic, then $c_u$ is independent of $z$.
+\item Take $H\rightarrow\infty$ for Eqn.~\ref{waveeqn2} and we recover Eqn.~\ref{waveeqn}.
+\end{enumerate}
+\end{remarks}
+\begin{cor}
+The stratified medium results in a frequency cutoff $c_u/2H$.
+\end{cor}
+\begin{proof}
+We are looking for plane wave solutions $\Delta\rho\propto e^{i(kz-\omega t)}$. This gives a dispersion relation
+\begin{equation}
+    -\omega^2=-c_u^2k^2+c_u^2\frac{ik}{H}\implies\omega_u^2=c_u^2\bigg(k^2-\frac{ik}{H}\bigg)\implies k=\frac{i}{2H}\pm\sqrt{\bigg(\frac{\omega}{c_u}\bigg)^2-\bigg(\frac{1}{2H}\bigg)^2}\label{dispersion_stratified}
+\end{equation}
+If $\omega>c_u/2H$, then $\text{Im}[k]=1/2H$ and $\text{Re}[k]=\pm\sqrt{(\omega/c_u)^2-(1/2H)^2}$. Hence, the profile is an evanescent wave $\Delta\rho\propto e^{-z/2H}e^{i(\pm\sqrt{(\omega/c_u)^2-(1/2H)^2}z-\omega t)}$. If we set $\text{Re}[k]=K=\pm\sqrt{(\omega/c_u)^2-(1/2H)^2}$, then the lines of constant phase propagate at $v_p=\omega/K$, i.e. a dispersive wave with group velocity $v_g=c_u^2/v_g=c_u\sqrt{1-(1/2KH)^2}$.\\[5pt]
+If $\omega<c_u/2H$, then $ik\in\mathbb{R}^+$, hence we get a standing wave. This arose from reflections resulting from the changing properties of the atmosphere (the change over one wavelength starts to become very significant).
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item For the velocity perturbation, we have $\Delta\mathbf{u}=\frac{\Delta\rho}{\rho_0}\frac{\omega}{k}$. Since the amplitude of $\Delta\rho$ scales as $e^{-z/2H}$, whereas the background density scales as $e^{-z/2H}$, we see that the perturbed velocity (and the fractional density variation) then increases with height via $e^{z/2H}$.
+\item If there is no energy dissipation (via viscosity of the medium), then the kinetic energy flux in a wave is independent of the height. If $\rho_0\propto e^{-z/H}$, then the wave amplitude must grow in order to conserve kinetic energy flux in an atmosphere that is increasingly rarefied as the wave propagates upwards. Once the velocity approach the sound speed, the perturbed density becomes comparable with the unperturbed density. At this point, our linear treatment breaks down. The non-linear wave would then steepen and form a shock.
+\item For simplicity, the problem was specified with Lagrangian perturbations. In the case of adiabatic perturbations each fluid element conserves its entropy and hence $\Delta p=\Delta\rho\times\gamma p_0/\rho_0$. Since in an isothermal atmosphere the fluid elements at different heights have different entropies, when fluid elements are perturbed the entropy per unit mass at a given location is not preserved, hence $\delta p\neq\delta\rho\times\gamma p_0/\rho_0$.
+\item For generic wave propagation problems, the steps are
+\begin{enumerate}
+    \item write down the fluid equations
+    \item describe the equilibrium to be perturbed
+    \item choose the perturbed variables $\Delta$, and transform them into $\delta$ quantities. If the unperturbed structure is not uniform, this will involve extra terms in $\xi$
+    \item substitute $\delta$ quantities into the Eulerian fluid equations and retain only first order terms in $\Delta$
+    \item eliminate the $\Delta$ variables between equations so that the resulting equation is in terms of one variable only
+    \item look for wavelike solutions $\propto e^{i(kx-\omega t)}$ to obtain the dispersion relation.
+\end{enumerate}
+\end{enumerate}
+\end{remarks}
+\subsection{Transmission at interfaces}
+\begin{prop}
+Suppose we have a non-dispersive medium with a boundary to another at $x=0$, and consider that the sound speed at $x<0$ is $c_{s1}$ and for $x>0$ it is $c_{s2}$. Suppose we have a sound wave in the $x$ direction coming from $x<0$, the reflected and transmitted wave amplitudes are respectively
+\begin{equation}
+    r=\frac{k_1-k_2}{k_1+k_2},\quad t=\frac{2k_1}{k_1+k_2}\label{transmissionreflection}
+\end{equation}
+while the energies of the reflected and transmitted waves are respectively proportional to
+\begin{equation}
+    k_1\bigg(\frac{k_1-k_2}{k_1+k_2}\bigg)^2,\quad k_2\bigg(\frac{2k_1}{k_1+k_2}\bigg)^2\label{transmissionreflection2}
+\end{equation}
+\end{prop}
+\begin{proof}
+The reflected and transmitted waves are $re^{i(-k_1x-\omega t)}$ and $te^{i(k_2x-\omega t)}$ respectively. Continuity of wave amplitude and its derivative across the boundary ($x=0$):
+$$1+r=1,\quad k_1(1-r)=k_2t$$
+The kinetic energy flux in a wave is $\rho(\delta u)^2c_s\sim p(\delta u)^2/c_s$, and $p$ is constant across the interface. The initial energy is $k_1$ times a constant, and the energies taken by the reflected and transmitted waves are respectively the same constant times $k_1(\frac{k_1-k_2}{k_1+k_2})^2$ and $k_2(\frac{2k_1}{k_1+k_2})^2$.
+\end{proof}
+\begin{remarks}
+Sound waves tend to bounce off cold, dense structures rather than propagating through them, making it difficult to excite disturbances in cold dense clouds (Giant Molecular Clouds) through the action of sound waves propagating in the surrounding low density medium.
+\end{remarks}
+\newpage
+\section{Supersonic flows}
+\subsection{Shocks}
+\begin{defi}[Shocks]
+When a piece of fluid is subjected to a non-linear disturbance, this results in the propagation of a shock.
+\end{defi}
+\begin{eg}
+Gas free-falling onto the surface of stars or gas orbiting in a spiral galaxy travels at hundreds of kilometres per seconds; in clusters of galaxies, the free-fall speed of the gas may attain thousands of kilometres per second. Any relative motion between fluid elements at these sort of speeds must result in a shock.
+\end{eg}
+\begin{remarks}
+The acceleration to supersonic velocities (in the observer's frame) does not itself generate a shock, since in its own rest frame the gas is at rest. It is only the sudden deceleration when it meets other fluid in relative motion that produces shock phenomena.
+\end{remarks}
+\begin{defi}[Mach number]
+We define the Mach number $M$ to be the ratio of the flow speed to the speed of sound:
+\begin{equation}
+    M=v/c_s\label{Mach}
+\end{equation}
+\end{defi}
+\begin{prop}
+Consider an observer situated at the source of a spherical disturbance watching the fluid flow past it at a speed $v$. The velocity of the disturbance relative to the observer is the resultant vector sum of $v$ and the velocity vectors of the disturbance relative to the fluid (magnitude $c_s$). The maximum angle between the resultant vector and the flow direction of a supersonic flow is $\alpha$, which is 
+\begin{equation}
+    \alpha=\sin^{-1}(c_s/v)=\sin^{-1}(1/M)\label{supersonic}
+\end{equation}
+\end{prop}
+\begin{proof}
+For a subsonic flow, this resultant vector always sweeps out $4\pi$ steradians as seen from the point of view of the observer. For supersonic flow, the resultant vector always points to the right. Consider the superposition of the vector $v$ with disturbances whose angle to the direction of $v$ varies from $\pi$ (upstream propagation) to 0 (downstream propagation). As this angle is initially reduced from $\pi$, the angle between the resultant and $v$ first of all increases, but attains a maximum when this resultant is tangential to the sphere of radius $c_s$. By geometry, $\sin\alpha=c_s/v$.
+\end{proof}
+\begin{defi}[Mach cone]
+The Mach number defines a cone of directions in which disturbances from the point can propagate. The Mach cone has half-angle $\alpha=\sin^{-1}(1/M)$.
+\end{defi}
+\begin{remarks}
+For an obstacle in a supersonic flow, the disturbances cannot propagate upstream from the obstacle, i.e. the flow cannot adjust to the presence of the obstacle because thee is no way of propagating a signal in that direction. Therefore the flow is undisturbed until it reaches the obstacle, and there its properties change discontinuously in a shock.\\[5pt]
+When the flow is subsonic, by contrast, it can adjust to the presence of an obstacle because the disturbances it causes can be communicated upstream through the fluid.
+\end{remarks}
+\newpage
+\subsection{Rankine-Hugoniot relations}
+The shock manifests itself as a boundary between two regions of the fluid where the conditions change discontinuously through the shock.
+\begin{prop}[Rankine-Hugoniot relations for adiabatic shocks]
+Across the boundary defined by an adiabatic shock, the quantities $\rho$, $u$, $p$ are related via
+\begin{equation}
+    \rho_1u_1=\rho_2u_2\label{RH1}
+\end{equation}
+(Equation of mass conservation)
+\begin{equation}
+    \rho_1u_1^2+p_1=\rho_2u_2^2+p_2\label{RH2}
+\end{equation}
+(Conversion of ram pressure to thermal pressure)
+\begin{equation}
+    \frac{1}{2}u_1^2+\mathcal{E}_1+\frac{p_1}{\rho_1}=\frac{1}{2}u_2^2+\mathcal{E}_2+\frac{p_2}{\rho_2}\label{RH3}
+\end{equation}
+(Conversion of kinetic energy into enthalpy)
+\end{prop}
+\begin{proof}
+The equation of continuity (Eqn.~\ref{continuity1}) in the $x$ direction (normal to the shock) gives
+$$\frac{\partial\rho}{\partial t}+\frac{\partial}{\partial x}(\rho u_x)=0\implies\frac{\partial}{\partial t}\int\rho dx+\rho u_x|_{0.5dx}-\rho u_x|_{-0.5dx}=0$$
+For an infinitesimal layer $dx$, the mass flux in is equal to the mass flux out (i.e. the mass does not accumulate in this layer), so $\frac{\partial}{\partial t}\int\rho dx=0$. Hence, we obtain Eqn.~\ref{RH1}.\\[5pt]
+The $x$ component of the momentum equation (Eqn.~\ref{momentumEqn}) gives
+$$\frac{\partial}{\partial t}(\rho u_x)=-\frac{\partial}{\partial x}(\rho u_xu_x+p)-\rho\frac{\partial\Phi}{\partial x}\implies\frac{\partial}{\partial t}\int(\rho u_x)dx=-(\rho u_xu_x+p)|_{dx/2}+(\rho u_xu_x+p)|_{-dx/2}$$
+since the contribution from the gravitational term is negligible because $\Phi$ is continuous at the shock, hence giving Eqn.~\ref{RH2}. The other two velocity components do not change across the boundary since $\rho u_xu_y$ and $\rho u_xu_z$ are constant across the boundary, hence $u_y$ and $u_z$ must be the same on either side of the boundary.\\[5pt]
+Assuming the gas cannot cool (i.e. adiabatic shock) and the gas is isothermal. Then, the Eqn.~\ref{energyeqn} gives Eqn.~\ref{RH3}, where $\rho u$ is constant across the shock and $\Phi$ is continuous at the shock.
+\end{proof}
+\begin{remarks}
+Qualitatively, a shock converts an ordered flow upstream into a disordered flow downstream.
+\end{remarks}
+\begin{cor}
+Eqn.~\ref{RH3} may be written as
+\begin{equation}
+    \frac{1}{2}u_1^2+\frac{c_1^2}{\gamma-1}=\frac{1}{2}u_2^2+\frac{c_2^2}{\gamma-1}\label{RH3b}
+\end{equation}
+\end{cor}
+\begin{proof}
+Note that if any gas is brought to a particular point in thermodynamic phase space by adiabatic compression, then the internal energy stored in the gas is just the $pdV$ work done along that adiabatic path. Since an adiabatic path is defined by $p=K\rho^\gamma$ for some constant $K$, then the $pdV$ work is simply $K\rho^\gamma d(1/\rho)$. The internal energy can then be written as $\mathcal{E}=\frac{1}{\gamma-1}\frac{p}{\rho}$. Assume that $\gamma$ does not change across the shock, then Eqn.~\ref{RH3} can be re-written as
+$$\frac{1}{2}u_1^2+\frac{\gamma}{\gamma-1}\frac{p_1}{\rho_1}=\frac{1}{2}u_2^2+\frac{\gamma}{\gamma-1}\frac{p_2}{\rho_2}$$
+but $c^2=\gamma p/\rho$.
+\end{proof}
+\begin{cor}
+\begin{equation}
+    \frac{\rho_2}{\rho_1}=\frac{(\gamma+1)p_2+(\gamma-1)p_1}{(\gamma+1)p_1+(\gamma-1)p_2}\label{RH4}
+\end{equation}
+\end{cor}
+\begin{proof}
+We define the mass current as $j=\rho u$, which is conserved (follows from Eqn.~\ref{RH1}). The other two relations become respectively
+$$p_1+\frac{j^2}{\rho_1}=p_2+\frac{j^2}{\rho_2},\quad\frac{j^2}{2\rho_1^2}+\frac{\gamma}{\gamma-1}\frac{p_1}{\rho_1}=\frac{j^2}{2\rho_2^2}+\frac{\gamma}{\gamma-1}\frac{p_2}{\rho_2}$$
+which gives
+$$\implies j^2=\frac{p_2-p_1}{\rho_1^{-1}-\rho_2^{-1}}\implies\frac{1}{2}(p_2-p_1)\bigg(\frac{1}{\rho_1}+\frac{1}{\rho_2}\bigg)=\frac{\gamma}{\gamma-1}\bigg(\frac{p_2}{\rho_2}-\frac{p_1}{\rho_1}\bigg)$$
+which simplifies to the desired equation.
+\end{proof}
+\begin{remarks}
+In the limit of strong shocks ($p_2>>p_1$), we have $\frac{\rho_2}{\rho_1}\rightarrow\frac{\gamma+1}{\gamma-1}$. For monatomic gas, $\gamma=5/3$, so this ratio pre- to post-shock is then 4. But, in general $p_1/\rho_1^\gamma=K_1\neq K_2$, so in a shock, the gas jumps from one adiabat to another one of higher entropy, i.e. shocks are permitted thermodynamically. In general, when we have irreversible changes (like in the presence of viscosity), an adiabatic change does not imply that the before and after states are linked by the relation $p=K\rho^\gamma$.
+\end{remarks}
+In general, $\dot{Q}\neq 0$ so eventually the shocked gas will cool, sometimes back to close to its original temperature. We can define a cooling length where the shock cools back to the same temperature. 
+\begin{remarks}
+Adiabatic shocks have cooling length $\ell_{\text{cool}}>L$, while isothermal shocks have cooling lengths $\ell_{\text{cool}}<<L$, where $L$ is the size of the system.
+\end{remarks}
+\begin{prop}[Isothermal shocks]
+\begin{equation}
+    \frac{\rho_2}{\rho_1}=\frac{u_1}{u_2}=M^2\label{isothermal_shocks}
+\end{equation}
+\end{prop}
+\begin{proof}
+The first two Rankine-Hugoniot conditions (Eqns.~\ref{RH1} and \ref{RH2}) are still valid, and will give
+$$\rho_1(u_1^2+c_s^2)=\rho_2(u_2^2+c_s^2)\implies (u_2-u_1)c_s^2=u_1u_2(u_2-u_1)$$
+But the third condition will instead be $T_2=T_1$. Provided $u_2\neq u_1$, we have $c_s^2=u_1u_2$.
+\end{proof}
+\begin{remarks}
+In an isothermal shock, the compression factor is the square of the Mach number of the pre-shocked flow.
+\end{remarks}
+\begin{prop}
+The post-shock flow is always subsonic, irregardless whether the shock is adiabatic or isothermal.
+\end{prop}
+\begin{proof}
+For an isothermal shock, we had $c_s^2=u_1u_2$. So if $u_1>c_s$ (condition for a shock), then $u_2<c_s$. For adiabatic shocks, for a given $\gamma$, the Rankine-Hugoniot equations (Eqn.~\ref{RH1} and \ref{RH2}) can be written as
+$$\rho_1M_1c_1=\rho_2M_2c_2,\quad\rho_1c_1^2\bigg(M_1^2+\frac{1}{\gamma}\bigg)=\rho_2c_2^2\bigg(M_2^2+\frac{1}{\gamma}\bigg)$$
+which gives $M_2c_1(M_1^2+\gamma^{-1})=M_1c_2(M_2^2+\gamma^{-1})$. Together with Eqn.~\ref{RH3}, we have
+$$M_1^2(M_2^2+\gamma^{-1})^2\bigg(M_1^2+\frac{2}{\gamma-1}\bigg)=M_2^2(M_1^2+\gamma^{-1})^2\bigg(M_2^2+\frac{2}{\gamma-1}\bigg)$$
+Simplifying this, and noting that $M_1^2\neq M_2^2$ (condition for shock), then 
+$$M_2^2=\frac{2+(\gamma-1)M_1^2}{2\gamma M_1^2-(\gamma-1)}=\frac{M_1^2+2n}{2M_1^2-1+2nM_1^2}$$
+where $\gamma=1+\frac{1}{n}$. Hence, if $M_1>1$, then $M_2<1$. 
+\end{proof}
+\newpage
+\section{Blast waves}
+\subsection{Understanding supernovae}
+One of the most important applications of shock wave theory in astrophysics is the phenomenon of supernova. 
+\begin{defi}[Supernovae]
+During a supernova explosion, a total of $10^{44}$ J of energy is ejected into a small region around the star on an astronomically minute timescale (a day or so). The shocked medium expands and sweeps up more gas, creating a large bubble in the interstellar medium (ISM). 
+\end{defi}
+Consider an idealized explosion where an explosion energy $E$ is delivered instantaneously at a point which is surrounded by an atmosphere of uniform density $\rho_0$. Ignore the temperature of the atmosphere ($T_0=0$) and any effects of thermal pressure from the medium confining the explosion. 
+\begin{prop}[Approximate solution]
+$$R\propto t^{2/5},\quad u_0\propto t^{-3/5},\quad p_1\propto t^{-6/5}$$
+\end{prop}
+\begin{proof}
+As the explosion propagates out there will be a shock, and the medium is swept up into a shell of shocked gas, of density $\rho_1$ and thickness $D$, with the explosion products behind it. Since the temperature in the unshocked gas is zero, the Mach number for the shock is $M\rightarrow\infty$. For an adiabatic shock, $\rho_1/\rho_0=(\gamma+1)/(\gamma-1)$. Assuming all the mass in the gas is swept up into it, then
+$$D=\frac{4\pi}{3}\rho_0R^3\frac{1}{4\pi\rho_1R^2}=\frac{1}{3}\frac{\gamma-1}{\gamma+1}R$$
+Assume that all the gas in the shell moves with the same velocity at any instant. Since the shell is thin, we can use an average velocity to represent the gas motion within it. In the frame of the shock, we invoke the Rankine-Hugoniot relations. Eqn.~\ref{RH1} for a strong shock gives
+$$u_1=\frac{\rho_0}{\rho_1}u_0=\frac{\gamma-1}{\gamma+1}u_0$$
+Relative to the unshocked gas (equivalently, relative to the centre of the explosion), the velocity of the shocked gas is $U=u_0-u_1=\frac{2u_0}{\gamma+1}$. The shell grows, gaining momentum at a rate $\frac{d}{dt}\frac{4\pi}{3}\rho_0R^3\frac{2u_0}{\gamma+1}$, where the mass of the gas swept up is $\frac{4\pi}{3}\rho_0R^3$. This radial momentum gain has to be provided by the pressure acting on the inside of the shell, $p_{\text{in}}:=\alpha p_1$ for some $\alpha$ and $p_1$ being the pressure in the shell (which is $\frac{2}{\gamma+1}\rho_0u_0^2$ for a strong shock). Set the outside pressure to zero via $T_0=0$. The rate of change of radial momentum equals the force over the whole area:
+$$\frac{d}{dt}\bigg[\frac{4\pi}{3}\rho_0R^3\frac{2u_0}{\gamma+1}\bigg]=4\pi\alpha R^2\frac{2}{\gamma+1}\rho_0u_0^2\implies\frac{d}{dt}(R^3u_0)=3\alpha R^2u_0^2$$
+But, $u_0=\frac{dR}{dt}$ is the speed with which the shock advances on the undisturbed gas. We guess an ansatz $R\propto t^b$, then we have 
+$$\frac{d}{dt}(R^3\dot{R})=3\alpha R^2\dot{R}^2\implies b(4b-1)t^{4b-2}=3\alpha b^2t^{4b-2}$$
+Suppose $R$ is not constant, then $b=\frac{1}{4-3\alpha}$, i.e. we have power law scalings
+$$R\propto t^{1/(4-3\alpha)},\quad u_0\propto t^{(3\alpha-3)/(4-3\alpha)}\propto R^{3\alpha-3}$$
+To find $\alpha$, we consider the energy of the explosion, which is conserved for an adiabatic blast wave. The kinetic energy of the shell is $\frac{1}{2}\frac{4\pi}{3}\rho_0R^3U^2$. The internal energy per unit volume is $\frac{p}{\gamma-1}$. Since the shell is thin, most of the volume of the bubble created by the blast wave is in the internal cavity, hence the most of the internal energy is in the material in the cavity. So the total energy is
+$$E=K+\mathcal{E}=\frac{1}{2}\frac{4\pi}{3}\rho_0R^3U^2+\frac{4\pi}{3}R^3\frac{p_{\text{in}}}{\gamma-1}=\frac{4\pi}{3}R^3\bigg[\frac{1}{2}\rho_0\bigg(\frac{2u_0}{\gamma+1}\bigg)^2+\frac{\alpha}{\gamma-1}\frac{2\rho_0u_0^2}{\gamma+1}\bigg]$$
+i.e. $E\propto R^3u_0^2\propto t^{(6\alpha-3)/(4-3\alpha)}$. But $E\propto t^0\implies\alpha=1/2$.
+\end{proof}
+\begin{remarks}
+For $\gamma=5/3$, $D/R\sim 0.08<<1$, so the assumption of a thin shell is justified.
+\end{remarks}
+\begin{prop}[Similarity solution]
+$$R_{\text{shock}}\propto (E/\rho_0)^{1/5}t^{2/5}$$
+\end{prop}
+\begin{proof}
+There are only two parameters $E $and $\rho_0$ in the problem. Suppose that $\lambda$ is a scale parameter giving the size of the blast wave at a time $t$ after the explosion. Apart from being a monotonically increasing function of time, the evolution of $\lambda$ may depend on $E$ and $\rho_0$. By dimensional analysis, we have $\lambda=(Et^2/\rho_0)^{1/5}$. Introduce a dimensionless distance parameter $\xi:=r(\rho_0/Et^2)^{1/5}$. 
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item If the problem is well-posed, then there is no obvious characteristic lengthscales or timescales. Then, all variables can be written in the form
+$$X(r,t)=X_1(t)\tilde{X}(\xi)$$
+where the snapshot of the distribution $X$ at any time will have the same shape, scaled up or down by a time-dependent factor $X_1(t)$.
+\item When the pressure from outside the shock $p_0=\frac{\mathcal{R}_*}{\mu}\rho_0T_0$ becomes significant, then this condition is equivalent to $u_0\sim c_s$, i.e. that the shell is no longer moving supersonically with respect to the medium, hence losing the blast wave character. 
+\item During the blast wave phase, all the gas in its path is swept up in to a shell and after that moves with the shell. In the late stages, the disturbance passes in to the undisturbed gas as a mild compression followed by a rarefaction, and after the wave has passed the gas returns to its original state. The maximum blast wave radius $R_{\text{max}}$ is obtained by $p_1\sim p_0$ (which is approximately the criterion $u_0=c_0$), i.e. the blast wave gets out to a point where the explosion energy is equal to the total thermal energy contained within that sphere.
+\end{enumerate}
+\end{remarks}
+\begin{eg}
+Consider the maximum size attained by a supernova driven bubble in the interstellar medium (ISM). This timescale is roughly the timescale on which a sound wave in the undisturbed ISM would cross $R_{\text{max}}$, which is also roughly the timescale on which the fully blown bubble is enroached by the ISM and dissolves. We have $T\sim 10^4$ K and $\rho\sim10^{-21}$ kg m$^{-3}$, $\implies R_{\text{max}}$ turns out to be several 100 pc.\\[5pt]
+Now, the supernova rate in the Milky Way is roughly $10^{-7}$ Myr$^{-1}$ per cubic parsec, so within a time $R_{\text{max}}/c_0$, the volume of ISM containing one supernova on average is $\sim 10^6$ pc$^3$. But, the expected final bubble volume $\frac{4\pi}{3}R_{\text{max}}^3$ exceeds this by two orders of magnitude, leading us to conclude that the filling factor of supernova driven bubbles should be much larger than unity. But, the ISM is not permanently heated to high temperatures by supernova explosions, which is not observed. In reality, the supernova is much less efficient at heating the ISM due to radiative cooling and blowout from galactic disks. 
+\end{eg}
+\newpage
+\section{Bernoulli's equation and stellar winds}
+\subsection{Bernoulli's theorem}
+\begin{thm}[Bernoulli's theorem]
+The quantity 
+\begin{equation}
+    H=\frac{1}{2}u^2+\int\frac{dp}{\rho}+\Phi\label{Bernoulli}
+\end{equation}
+is a constant along streamlines of a steady barotropic flow.
+\end{thm}
+\begin{proof}
+Consider the momentum equation (Eqn.~\ref{momentumEqn}) for a steady flow $(\partial u/\partial t=0)$ and the barotropic equation of state $p=p(\rho)\implies\frac{1}{\rho}\boldsymbol{\nabla}p=\boldsymbol{\nabla}\int\frac{dp}{\rho}$. Since
+$$\varepsilon_{ijk}u_j\varepsilon_{klm}\partial_l u_m=u_j\partial_iu_j-u_j\partial_ju_i\implies\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}=\boldsymbol{\nabla}\frac{1}{2}u^2-\mathbf{u}\times(\boldsymbol{\nabla}\times\mathbf{u})$$
+and together with taking a dot product of this equation, then we have
+$$\mathbf{u}\cdot\boldsymbol{\nabla}H=0$$
+where $H$ is given in Eqn.~\ref{Bernoulli}, i.e. $H$ is constant along streamlines.
+\end{proof}
+\begin{remarks}
+For $p=0$, $H=$const. implies the kinetic energy plus potential energy along streamlines is a constant. For $p\neq 0$, the pressure differences may accelerate the flow, converting kinetic energy between random molecular motions and bulk flow.
+\end{remarks}
+\begin{defi}[Vorticity]
+We define the vorticity $\boldsymbol{\omega}$ to be
+\begin{equation}
+    \boldsymbol{\omega}:=\boldsymbol{\nabla}\times\mathbf{u}\label{vorticity}
+\end{equation}
+\end{defi}
+\begin{cor}
+If the flow is irrotational ($\boldsymbol{\omega}=\boldsymbol{0}$) and steady, then we have
+\begin{equation}
+    \boldsymbol{\nabla}H=0\label{Bernoulli2}
+\end{equation}
+i.e. $H$ is constant everywhere.
+\end{cor}
+\begin{proof}
+Again look at Eqn.~\ref{momentumEqn} for a barotropic steady and irrotational flow. Rearrange the equation to obtain the desired form.
+\end{proof}
+\begin{remarks}[Irrotational flow]
+By Stokes' theorem, $\oint\mathbf{u}\cdot d\mathbf{l}=\int(\boldsymbol{\nabla}\times\mathbf{u})\cdot d\mathbf{S}$. If $\boldsymbol{\omega}=\boldsymbol{\nabla}\times\mathbf{u}=\boldsymbol{0}$, then $\oint\mathbf{u}\cdot d\mathbf{l}=0$. Note that Stokes' theorem can only hold if there is no singularity in $\boldsymbol{\nabla}\times\mathbf{u}$. For instance, for $\mathbf{u}=r^{-1}\boldsymbol{\hat{\phi}}$, one can have $\boldsymbol{\nabla}\times\mathbf{u}=0$ but $\oint\mathbf{u}\cdot d\mathbf{l}\neq 0$. This is due to the singularity at $r=0$.
+\end{remarks}
+\begin{cor}[Helmholtz's equation]
+\begin{equation}
+    \frac{\partial\boldsymbol{\omega}}{\partial t}=\boldsymbol{\nabla}\times(\mathbf{u}\times\boldsymbol{\omega})\label{Helmholtz}
+\end{equation}
+\end{cor}
+\begin{proof}
+Take the curl of the momentum equation (Eqn.~\ref{momentumEqn}) for a barotropic fluid, we have
+$$\frac{\partial}{\partial t}\boldsymbol{\nabla}\times\mathbf{u}=-\boldsymbol{\nabla}\times\boldsymbol{\nabla}H+\boldsymbol{\nabla}\times(\mathbf{u}\times\boldsymbol{\omega})$$
+The desired result follows since the curl of a gradient is zero.
+\end{proof}
+\begin{remarks}
+If the fluid is irrotational $\boldsymbol{\omega}=\boldsymbol{0}$ initially, then it stays irrotational.
+\end{remarks}
+\begin{defi}[Scalar potential for fluid]
+For an irrotational fluid, we can write the velocity $\mathbf{u}$ as the gradient of some scalar potential function $\Phi_\mathbf{u}$. If the flow is additionally incompressible, it satisfies the Laplace's equation, i.e. $\nabla^2\Phi_\mathbf{u}=0$.
+\end{defi}
+\begin{remarks}
+For two-dimensional irrotational and incompressible flows, we can write $\mathbf{u}=-\boldsymbol{\nabla}\times(\phi(x,y)\mathbf{\hat{e}_z})$. Equivalently, $u_x=-\frac{\partial\phi}{\partial y}$ and $u_y=\frac{\partial\phi}{\partial x}$. This means $d\phi=\frac{\partial\phi}{\partial x}dx+\frac{\partial\phi}{\partial y}dy=0$, i.e. this is a streamfunction, constant along the streamlines.
+\end{remarks}
+\begin{thm}[Kelvin's vorticity theorem]
+The flux of the vorticity $\boldsymbol{\omega}$ is conserved and moves with the fluid.
+\begin{equation}
+    \frac{D}{Dt}\int_S\boldsymbol{\omega}\cdot d\mathbf{S}=0\label{vorticityflux}
+\end{equation}
+\end{thm}
+\begin{proof}
+$\int_S\boldsymbol{\omega}\cdot d\mathbf{S}$ can change with time for two reasons - the intrinsic change in $\boldsymbol{\omega}$ and the change in the surface $S$ caused by the flow. Hence,
+$$\frac{D}{Dt}\int_S\boldsymbol{\omega}\cdot d\mathbf{S}=\int_S\frac{\partial\boldsymbol{\omega}}{\partial t}\cdot d\mathbf{S}+\int_S\boldsymbol{\omega}\cdot\frac{Dd\mathbf{S}}{Dt}$$
+Consider the change in area element, from $d\mathbf{S}$ to $d\mathbf{S'}$ in a time interval $\delta t$. The vector area of the sides of the volume which has these elements as ends is $-\delta t\mathbf{u}\times\delta\mathbf{l}$, where $\delta\mathbf{l}$ is a length element  on the curve bounding $d\mathbf{S}$. Since the vector area over an entire closed volume is zero, i.e. $\int d\mathbf{S}=\boldsymbol{0}$, we have
+$$0=d\mathbf{S'}-d\mathbf{S}-\delta t\oint\mathbf{u}\times \delta\mathbf{l}$$
+where $\delta\mathbf{l}$ is a length element on the curve bounding $d\mathbf{S}$. It follows that $\frac{Dd\mathbf{S}}{Dt}=\oint\mathbf{u}\times d\mathbf{l}$. Over the surface $S$, we have
+$$\int_S\boldsymbol{\omega}\cdot\frac{Dd\mathbf{S}}{Dt}=\int\oint\boldsymbol{\omega}\cdot(\mathbf{u}\times d\mathbf{l})=\int\oint(\boldsymbol{\omega}\times\mathbf{u})\cdot d\mathbf{l}$$
+Here, the double integral means that we first take the line integral around $d\mathbf{S}$ and then integrate to make up the surface $S$. Then the total line integral is around $C$ which encircles the whole surface $S$, since the inner components cancel out. Then, by Stokes' theorem,
+$$\int_S\boldsymbol{\omega}\cdot\frac{Dd\mathbf{S}}{Dt}=\oint_C\boldsymbol{\omega}\times\mathbf{u}\cdot d\mathbf{l}=\int_S\boldsymbol{\nabla}\times(\boldsymbol{\omega}\times\mathbf{u})\cdot d\mathbf{S}\implies\frac{D}{Dt}\int_S\boldsymbol{\omega}\cdot d\mathbf{S}=\int_S\bigg(\frac{\partial\boldsymbol{\omega}}{\partial t}-\boldsymbol{\nabla}\times(\mathbf{u}\times\boldsymbol{\omega})\bigg)\cdot d\mathbf{S}$$
+The RHS is zero from Helmholtz's equation.
+\end{proof}
+\newpage
+\subsection{De Laval nozzle}
+\begin{prop}
+Consider a steady flow in the $z$ direction in a tube of given variable cross-section $A(z)$. We have
+\begin{equation}
+    (u^2-c_s^2)\boldsymbol{\nabla}\ln u=c_s^2\boldsymbol{\nabla}\ln A\label{delaval}
+\end{equation}
+where $c_s$ is the speed of the sound. i.e. an area extremum corrresponds to either a maximum/minimum in $u$ or $u=c_s$.
+\end{prop}
+\begin{proof}
+Since the flow is steady, mass conservation gives 
+$$\rho uA=\dot{M}\implies\ln\rho+\ln u+\ln A=\ln\dot{M}$$
+The momentum equation (Eqn.~\ref{momentumEqn}) for a steady barotropic flow with no gravity is
+$$\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}=-\frac{1}{\rho}\boldsymbol{\nabla}p=-\frac{1}{\rho}\boldsymbol{\nabla}\rho\frac{dp}{d\rho}=(\boldsymbol{\nabla}\ln u+\boldsymbol{\nabla}\ln A)\frac{dp}{d\rho}$$
+But $\frac{dp}{d\rho}=c_s^2$ where $c_s$ is the speed of sound. If the flow is irrotational, we have $\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}=\boldsymbol{\nabla}\frac{1}{2}u^2=u^2\boldsymbol{\nabla}\ln u$.
+\end{proof}
+\begin{remarks}
+Eqn.~\ref{delaval} suggests that the gas can only make a sonic transition (subsonic to supersonic flow, or vice versa) at a maximum or minimum of the cross-sectional area of the nozzle.
+\end{remarks}
+\begin{eg}
+Apply Bernoulli's equation (Eqn.~\ref{Bernoulli}). Since there is no gravity and the flow is steady and irrotational, $\frac{1}{2}u^2+\int dp/\rho$ is a constant. To make progress, we need to know the equation of state.
+\begin{itemize}
+    \item isothermal $p=\frac{\mathcal{R}_*}{\mu}\rho T$: We have
+    $$\int\frac{dp}{\rho}=\frac{\mathcal{R}_*}{\mu}T\ln\rho=c_s^2\ln\rho$$
+    Since the transition must occur at the extremum of $A$, $A_m$, then $u|_{A_m}=c_s$. Suppose this transition happens (instead of $u$ attaining an extremum), then if $\dot{M}$ is specified and we know $c_s$ everywhere, as well as, $A(z)$, then
+    $$\frac{1}{2}u^2+c_s^2\ln\rho=\frac{1}{2}c_s^2+c_s^2\ln\rho|_{A_m}\implies u^2=c_s^2\bigg[1+2\ln\frac{uA}{c_sA_m}\bigg]$$
+    where $\rho|_{A_m}/\rho=uA/c_sA_m$ from mass conservation.
+    \item polytropic (and adiabatic) $p=K\rho^{1+(1/n)}$ ($1+(1/n)=\gamma$ only if the flow is isentropic). $c_s$ is now a function of density 
+    $$c_s^2=\frac{n+1}{n}K\rho^{1/n}\implies\int\frac{dp}{\rho}=nc_s^2\implies\rho|_{A_m}K^{1/2}\rho|_{A_m}^{1/2n}A_m=\dot{M}\implies\rho|_{A_m}=\bigg[\bigg(\frac{\dot{M}}{A_m}\bigg)^2\frac{n}{K(n+1)}\bigg]^{n/(2n+1)}$$
+    where we used mass conservation. Using Bernoulli's equation, we then have
+    $$\frac{1}{2}\bigg(\frac{\dot{M}}{A\rho}\bigg)^2+(n+1)K\rho^{1/n}=(n+0.5)\frac{n+1}{n}K\rho^{1/n}_{A_m}$$
+\end{itemize}
+Essentially, given $A(z)$, we can determine the structure of the flow everywhere subject to a given $\dot{M}$ and $c_s$.
+\end{eg}
+\begin{prop}
+By designing a nozzle which gets progressively narrower and then wider, we can accelerate a flow from a subsonic to a supersonic regime, with $u$ increasing monotonically.
+\end{prop}
+\begin{proof}
+From Eqn.~\ref{delaval}, we see that
+\begin{itemize}
+    \item in a subsonic regime ($u<c_s$), if $A$ decreases, then $\boldsymbol{\nabla}\ln u>0$, and hence the speed $u$ increases.
+    \item in a supersonic regime ($u>c_s$), if $A$ increases, then the reduction in density is so large that $u$ has to increase to keep $\dot{M}$ constant. This counter-intuitive result stems from the much greater compressibility of supersonic flow.
+\end{itemize}
+\end{proof}
+\begin{eg}
+It was suggested that the narrow jets emanating from the centres of some galaxies, which can be highly supersonic, can be modelled as de Laval nozzles. But such purely thermal acceleration (through pressure gradients) implies the centre of the galaxy is hot and dense, which should cool down very quickly and cease to drive the jet activity.
+\end{eg}
+\begin{remarks}
+From the momentum equation again (Eqn.~\ref{momentumEqn}), one can show 
+$$\boldsymbol{u}\cdot\boldsymbol{\nabla}u=u^2\boldsymbol{\nabla}\ln u=-c_s^2\boldsymbol{\nabla}\ln\rho$$
+\begin{itemize}
+    \item If $u<<c_s$, then $\boldsymbol{\nabla}\ln u>>\boldsymbol{\nabla}\ln\rho$. This implies that accelerations in the flow are important, and pressure changes small. The fluid motion is thus nearly incompressible.
+    \item If $u>>c_s$, then $\boldsymbol{\nabla}\ln u<<\boldsymbol{\nabla}\ln\rho$. Hence, $u$ is approximately constant and pressure gradients are not very important in accelerating the flow, but give rise to density changes predominantly.
+\end{itemize}
+\end{remarks}
+\subsection{Spherical accretion and winds}
+\begin{prop}[Spherical accretion]
+Consider spherically symmetric accretion of gas onto a star (modelled as a point mass), then we have
+\begin{equation}
+    (u^2-c_s^2)\frac{d\ln u}{dr}=\frac{2c_s^2}{r}\bigg[1-\frac{GM}{2c_s^2r}\bigg]\label{sphericalaccretion}
+\end{equation}
+\end{prop}
+\begin{proof}
+The gas is assumed to be initially at rest at $\infty$, and so its inflow is subsonic at large distances from the star (so consequently $\boldsymbol{\nabla}p$ is important). By the time it nears the star, it may be essentially in free fall (i.e. supersonic flow in which $\boldsymbol{\nabla}p$ is unimportant). For this to happen, the gas has to make a sonic transition. In the steady state, the continuity Eqn.~\ref{continuity1} and momentum Eqn.~\ref{momentumEqn} give respectively:
+$$\dot{M}=4\pi r^2\rho u,\quad u\frac{du}{dr}=-\frac{1}{\rho}\frac{dp}{dr}-\frac{GM}{r^2}$$
+This gives
+$$\implies u^2\frac{d\ln u}{dr}=-c_s^2\frac{d\ln\rho}{dr}-\frac{GM}{r^2},\quad\frac{d\ln\rho}{dr}=-\frac{2}{r}-\frac{d\ln u}{dr}$$
+which gives the desired result.
+\end{proof}
+\begin{remarks}
+The radius $r_s=GM/2c_s^2$ is such that either $u$ is a maximum or minimum there or else $u=c_s$ there. Hence, this is called the sonic point.
+\end{remarks}
+\begin{eg}\leavevmode
+\begin{itemize}
+    \item Isothermal case (Bondi acceleration): $c_s$ is a constant. We have a boundary condition on the density at infinity, so as to find $\dot{M}$ and $\rho_s$. Using Bernoulli's equation, the radial structure of the flow is
+    $$\frac{1}{2}u^2+c_s^2\ln\rho-\frac{GM}{r}=\frac{1}{2}c_s^2+c_s^2\ln\rho_s-\frac{GM}{r_s}\implies u^2=2c_s^2\bigg[\ln\frac{\rho_s}{\rho}-\frac{3}{2}\bigg]+\frac{2GM}{r}$$
+    where $c_s^2=GM/r_s$. 
+    \item Polytropic case: $c_s^2=\frac{n+1}{n}K\rho^{1/n}$ is no longer constant. Invoke the following again:
+    $$\frac{1}{2}u^2+c_s^2\ln\rho-\frac{GM}{r}=\frac{1}{2}c_s^2+c_s^2\ln\rho_s-\frac{GM}{r_s}$$
+    which is a constant. But $\rho_s=\frac{\dot{M}}{4\pi r_s^2c_s}\implies r_s=\sqrt{\frac{\dot{M}}{4\pi\rho_sc_s^2}}$, which is also equal to $\frac{GM}{2c_s^2}$. This then give
+    $$\rho_s=\bigg(\frac{GM}{2}\bigg)^{4n/(3-2n)}\bigg(\frac{4\pi}{\dot{M}}\bigg)^{2n/(3-2n)}\bigg(\frac{n}{(n+1)K}\bigg)^{3n/(3-2n)}$$
+    $$\implies c_s=\bigg(\frac{GM}{2}\bigg)^{2/(3-2n)}\bigg(\frac{4\pi}{\dot{M}}\bigg)^{1/(3-2n)}\bigg(\frac{n}{(n+1)K}\bigg)^{n/(3-2n)},\quad r_s=\frac{GM}{2(\frac{\pi(GM)^2}{\dot{M}})^{2/(3-2n)}(\frac{n}{K(n+1)})^{2n/(3-2n)}}$$
+    We then have
+    \begin{equation}
+    \frac{1}{2}u^2+(n+1)K\rho^{1/n}-\frac{GM}{r}=\bigg(n-\frac{3}{2}\bigg)c_s^2\label{polytropic_sonic}
+    \end{equation}
+    $u$ can be obtained from the continuity equation. Take $r\rightarrow\infty$ such that $u\rightarrow\infty0$, then
+    $$\rho_{\infty}=\bigg(\frac{(n-1.5)c_s^2}{(n+1)K}\bigg)^n,\quad c^2_{s,\infty}=\frac{n-1.5}{n}c_s^2$$
+    This then give the accretion rate to be
+    $$\dot{M}=\frac{\pi(GM)^2\rho_\infty}{c^3_{s,\infty}}\bigg(\frac{n}{n-1.5}\bigg)^{n-1.5}$$
+    Eqn.~\ref{polytropic_sonic} implies that this constant is less than zero at $r_s$ if $n<1.5$, but we know this constant is more than zero at $r=\infty$ if the density $\rho>0$. Hence, for $n<1.5$, the sonic point is never attained because the gas is too incompressible - $\boldsymbol{\nabla}p$ which directs outwards, retards the flow enough to keep it subsonic everywhere and it never reaches free fall. $n=1.5$ corresponds to adiabatic flow in a monatomic gas. As $n$ is reduced towards 1.5 from above, the sound speed at the sonic point becomes arbitrarily high and that $r_s\rightarrow 0$. 
+\end{itemize}
+\end{eg}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+    \item More massive stars accret emuch more gas. Accretion from a colder medium is more effective.
+    \item Can generalize Bondi accretion to a medium that is moving through - Bondi-Hoyle-Lyttleton accretion: $\dot{M}\sim\frac{(GM)^2\rho_\infty}{(c^2_\infty+v^2_\infty)^{3/2}}$ where $v_\infty$ is the velocity of the gas relative to the star at $\infty$.
+\end{enumerate}
+\end{remarks}
+\begin{eg}[Stellar winds]
+Stellar winds are the inverse problem to spherical accretion onto stars. Bernoulli's equation contains only $u^2$, which is completely symmetric. The only difference is that the boundary conditions are set at the inner boundary - the density at the surface of the star. In general, important to solve stellar wind flows as a time-dependent hydrodynamical problem instead.
+\end{eg}
+\begin{remarks}
+The general solution to Eqn.~\ref{sphericalaccretion} is
+$$\frac{u^2}{c_s^2}-\ln\frac{u^2}{c_s^2}=4\ln\frac{r}{r_s}+\frac{4r_s}{r}+C$$
+We can also have solutions in which the flow instead attains a maximum or minimum velocity at the sonic point. Two solution branches are not physical - two values of $u$ at a given $r$. One solution branch is supersonic everywhere while another is subsonic everywhere, leaving only two curves having a sonic transition.
+\end{remarks}
+\newpage
+\section{Fluid instabilities}
+\begin{defi}[Stable configuration]
+A configuration is said to be stable with respect to small perturbations if either the perturbation diminish, or there is the possibility of oscillations or waves about the equilibrium configuration.
+\end{defi}
+\subsection{Convective instability}
+Convective stability is related to the stability of hydrostatic equilibrium.
+\begin{prop}[Schwarzschild criterion]
+Suppose we have a perfect gas in hydrostatic equilibrium in a uniform gravitational field, then if $\frac{dT}{dz}<0$, then the medium is stable if it satisfies
+\begin{equation}
+    \bigg|\frac{dT}{dz}\bigg|<\bigg(1-\frac{1}{\gamma}\bigg)\frac{T}{p}\bigg|\frac{dp}{dz}\bigg|\label{Schwarzschild}
+\end{equation}
+\end{prop}
+\begin{proof}
+Without loss of generality, take gravity to act in the $-z$ direction, so the pressure $p(z)$ and density $\rho(z)$ decrease as $z$ increases. Take a fluid element at the same density and pressure as its surroundings, and displace it upward by a small amount $\delta z$, where the surrounding density and pressure are $\rho'$ and $p'$. We know that pressure imbalances are removed very quickly by acoustic waves, but that heat exchange takes considerably longer, so initially the region of gas will change adiabatically to be in pressure equilibrium at the new position. As a result, the region will have a new density $\rho^*$ at the new position. 
+\begin{itemize}
+\item If $\rho^*<\rho'$, the displaced region will be buoyant and will continue to move away from the initial position, i.e. the system is unstable.
+\item If $\rho^*>\rho'$, the region will try to sink back to its original position, i.e. the system is stable.
+\end{itemize}
+Since the region is displaced adiabatically, we have
+$$\rho^*=\rho\bigg(\frac{p'}{p}\bigg)^{1/\gamma}=\rho+\frac{\rho}{\gamma p}\frac{dp}{dz}\delta z$$
+where $p'=p+\frac{dp}{dz}\delta z$ to first order. For the medium outside the displaced element, $\rho'=\rho+\frac{d\rho}{dz}\delta z$. Hence, the condition for a system to be unstable becomes
+$$\frac{\rho}{\gamma p}\frac{dp}{dz}<\frac{d\rho}{dz}\iff\frac{dK}{dz}<0$$
+i.e. the entropy of the atmosphere decreases with increasing height. The isentropic case $p=K\rho^\gamma$ is neutrally stable. Since $p=\frac{\mathcal{R}_*}{\mu}\rho T$, we have
+$$\rho'=\rho+\frac{d\rho}{dz}\delta z=\rho+\bigg[\frac{\rho}{p}\frac{dp}{dz}-\frac{\rho}{T}\frac{dT}{dz}\bigg]\delta z\implies\rho^*-\rho'=\bigg[-\bigg(1-\frac{1}{\gamma}\bigg)\frac{\rho}{p}\frac{dp}{dz}+\frac{\rho}{T}\frac{dT}{dz}\bigg]\delta z$$
+Then since $\frac{dp}{dz}<0$ (due to hydrostatic equilibrium), if $\frac{dT}{dz}<0$, the medium is stable if the Schwarzschild criterion Eqn.~\ref{Schwarzschild} is satisfied. If $\frac{dT}{dz}>0$, the medium is always stable to convection.
+\end{proof}
+\begin{remarks}
+If the system is unstable, the upwardly displaced elements keep on going to form convection cells, whose size is set by the length scale over which elements cease to be adiabatic, i.e. exchange heat with their surroundings. The upwardly displaced elements are hotter than their surroundings so heat exchange results in energy being deposited in the surrounding medium. 
+\end{remarks}
+\begin{eg}[Internal gravity waves]
+The force per unit volume acting on the displaced material is $-g(\rho^*-\rho')$, so the equation of motion for a fluid element (assuming it does not disturb the surrounding gas) is
+$$\rho^*\frac{d^2\delta z}{dt^2}=-g(\rho^*-\rho')=-g\bigg[-\bigg(1-\frac{1}{\gamma}\bigg)\frac{\rho}{p}\frac{dp}{dz}+\frac{\rho}{T}\frac{dT}{dz}\bigg]\delta z$$
+If the stability condition is satisfied, then the fluid element oscillates at frequency $\sqrt{\frac{g}{T}(\frac{dT}{dz}-(1-\frac{1}{\gamma})\frac{T}{p}\frac{dp}{dz})}$ - internal gravity waves in a stratified atmosphere.
+\end{eg}
+\subsection{Interface}
+The following concerns the stability of an interface with a discontinuous change in
+tangential velocity and/or density.
+\begin{eg}
+Over-turning of fluid in the case that the dense material over-lies lighter material in the presence of gravity, buckling of interfaces subject to shear motion, etc.
+\end{eg}
+\begin{prop}
+Consider two irrotational and incompressible ideal fluids in two dimensions, one lying above the other at rest in a uniform gravitational field, with the lower one having density $\rho$ just below the interface, and the upper one density $\rho'$ just above. They have uniform velocities $U$ and $U'$ in the $x$ direction. The dispersion relation for the perturbations in the surface of the interface is
+\begin{equation}
+\frac{\omega}{k}=\frac{\rho U+\rho'U'}{\rho+\rho'}\pm\sqrt{\frac{g}{k}\frac{\rho-\rho'}{\rho+\rho'}-\frac{\rho\rho'(U-U')^2}{(\rho+\rho')^2}}\label{dispersion}
+\end{equation}
+\end{prop}
+\begin{proof}
+Let $z=0$ be the horizontal interface, $x$ be in the plane of the interface, and $z$ be perpendicular to the interface. $\exists\phi$ such that $u=-\boldsymbol{\nabla}\phi$. Eqn.~\ref{momentumEqn} gives
+\begin{equation}
+-\boldsymbol{\nabla}\frac{\partial\phi}{\partial t}+\boldsymbol{\nabla}\frac{1}{2}u^2=-\boldsymbol{\nabla}\frac{p}{\rho}-\boldsymbol{\nabla}\Phi\implies -\frac{\partial\phi}{\partial t}+\frac{1}{2}u^2+\frac{p}{\rho}+\Phi = F(t)\label{momentumEqnscalarpotential}
+\end{equation}
+where $\Phi$ is the gravitational potential and $F(t)$ is a constant in space. We consider perturbations in the surface of the interface so the perturbed position is $\xi(x,t)$. The velocity potential in the fluid below and above can be written respectively as
+\begin{equation}
+\phi=-Ux+\psi,~\phi'=-U'x+\psi'\quad\nabla^2\psi=0,~\nabla^2\psi'=0\label{linearized}
+\end{equation}
+where $\psi$ and $\psi'$ are the respective perturbed part. These velocity perturbations are caused by displacements of the interface, so we now need to connect the velocity potential perturbations with $\xi$. If we take a fluid element within the lower fluid and at the interface, then its vertical velocity is given by $-\partial\psi/\partial z$. The velocity of this particular element is also given by the Lagrangian derivative of the displacement $D\xi/Dt$. At $z=0$, to first order in the perturbed quantities, we have respectively 
+$$-\frac{\partial\psi}{\partial z}=\frac{\partial\xi}{\partial t}+U\frac{\partial\xi}{\partial x},\quad-\frac{\partial\psi'}{\partial z}=\frac{\partial\xi}{\partial t}+U'\frac{\partial\xi}{\partial x}$$
+Since the perturbation equations are linearized, any arbitrary perturbation may be written as the sum of Fourier components. We seek wave-like solutions $\xi=Ae^{i(kx-\omega t)}$ and $\phi$, $\phi'$ will have the same $x$ and $t$ dependences. For both $\psi$ and $\psi'$ Laplace's equation has to be satisfied, and this sets the $z$ dependence
+\begin{equation}
+\psi=Ce^{i(kx-\omega t)+kz},\quad\psi'=C'e^{i(kz-\omega t)-kz}\label{ansatz}
+\end{equation}
+where the signs before $kz$ have been chosen so that the perturbations do not grow exponentially as we go far away from the interface. Plug the ansatz into Eqn.~\ref{linearized}, we have
+$$i(kU-\omega)A=-kC,\quad i(kU'-\omega)A=kC'$$
+Finally, the pressure is continuous across the interface. Using Eqn.~\ref{momentumEqnscalarpotential}, the pressure inside the lower fluid at the interface and the fluid above the interface, are at $z=0$ respectively
+$$p=-\rho\bigg(-\frac{\partial\psi}{\partial t}+\frac{1}{2}u^2+g\xi\bigg)+\rho F(t),\quad p'=-\rho'\bigg(-\frac{\partial\psi'}{\partial t}+\frac{1}{2}u'^2+g\xi\bigg)+\rho' F('t)$$
+But the perturbations vanish as $z\rightarrow\pm\infty$, $\rho F(t)-\rho'F'(t)$ is a constant. Hence, use the unperturbed values to determine
+$$\rho F(t)-\rho'F'(t)=\frac{1}{2}\rho U^2-\frac{1}{2}\rho'U'^2$$
+but the velocities $u$ and $u'^2$ can be obtained from
+$$u^2=(u\mathbf{\hat{x}}-\boldsymbol{\nabla}\psi)^2=U^2-2U\frac{\partial\psi}{\partial x},\quad u'^2=U'^2-2U'\frac{\partial\phi'}{\partial x}$$
+to first order. Plug in the ansatz
+$$\rho\bigg(-\frac{\partial\psi}{\partial t}-U\frac{\partial\psi}{\partial x}+g\xi\bigg)=\rho'\bigg(-\frac{\partial\psi'}{\partial t}-U'\frac{\partial\psi'}{\partial x}+g\xi\bigg)\implies\rho(-i(kU-\omega)C+gA)=\rho'(-i(kU'-\omega)C'+gA)$$
+Together with the earlier result, we obtain the dispersion relation
+$$\rho(kU-\omega)^2+\rho'(kU'-\omega)^2=kg(\rho-\rho')$$
+which gives our phase velocity for a given $k$.
+\end{proof}
+\begin{eg}[Surface gravity waves]
+Take two fluids at rest, with $\rho'<\rho$, and Eqn.~\ref{dispersion} simplifies to
+$$\frac{\omega}{k}=\pm\sqrt{\frac{g}{k}\frac{\rho-\rho'}{\rho+\rho'}}$$
+$\omega\in\mathbb{R}$ for $k\in\mathbb{R}$ and the disturbance moves as a wave. The waves are dispersive. If $\rho'<<\rho$, $\omega=\pm\sqrt{gk}$.
+\end{eg}
+\begin{cor}[Rayleigh-Taylor instability]
+Suppose now the density in the fluid above is greater than that in the fluid below, with the fluids initially at rest, then we will have an exponentially growing perturbation.
+\end{cor}
+\begin{proof}
+Eqn.~\ref{dispersion} becomes
+$$\omega=\pm ik\sqrt{\frac{g}{k}\frac{\rho'-\rho}{\rho'+\rho}}$$
+which is imaginary for $k\in\mathbb{R}$. The solution $\xi=Ae^{i(kx-\omega t)}$ will be an exponentially growing mode.
+\end{proof}
+\begin{eg}[Supernova]\leavevmode
+\begin{enumerate}
+\item In the blast wave case, we see that a thin shell of gas decelerates outwards. Inward acceleration is equivalent to outward directed gravity in the rest frame of the blast wave interface, so we have the dense shell of gas `on top' of the less dense gas outside. Rayleigh-Taylor instability results and leads to filaments in the post-shock gas.
+\item In the early supernova phase, as a star explodes a decelerating shock wave passes outward through the star (equivalent to reversing the direction of the effective gravity in what had been a stably stratified star). As a consequence, the star becomes Rayleigh-Taylor unstable, and the envelope is thoroughly mixed by this instability.
+\item During the evolution of supernova remnants, the gas swept up in the shock first begins to cool significantly and collapses into a thin shell. At that point, material is accelerated outwards towards the developing shell  by the outwardly directed pressure gradient. This outward acceleration is equivalent to inwardly directed gravity, and yet the shell material is denser than the gas interior to it. Rayleigh-Taylor instability occurs.
+\end{enumerate}
+\end{eg}
+\begin{cor}[Kelvin-Helmholtz instability]
+Suppose $g\neq 0$, $U,U'\neq 0$ and $\rho>\rho'$ (such that the system is Rayleigh-Taylor stable). If 
+\begin{equation}
+    k>\frac{(\rho^2-\rho'^2)g}{\rho\rho'(U-U')^2}\label{KH}
+\end{equation}
+then the interface between two fluids will wrinkle.
+\end{cor}
+\begin{proof}
+When the argument in the square root of Eqn.~\ref{dispersion} becomes negative, i.e. $\rho\rho'(U-U')^2>(\rho^2-\rho'^2)g/k$
+\end{proof}
+\begin{remarks}
+If $g=0$, then Eqn.~\ref{KH} tells us any wavenumber is Kelvin-Helmholtz unstable. Gravity is a stabilizing influence.
+\end{remarks}
+\begin{eg}
+An extragalactic or stellar jet moving at high speed with respect to the surrounding medium would therefore be subjected to Kelvin-Helmholtz instability. As a result, jets show variations in intensity and cross-section along the axis of the jet.
+\end{eg}
+\newpage
+\subsection{Jeans instability}
+Jeans instability concerns the stability of a self-gravitating fluid against gravitational collapse. For waves with wavelength long enough in a uniform medium, we can no longer ignore gravity.
+\begin{prop}[Jeans' dispersion relation]
+For a uniform medium (initially static) with barotropic equation of state, small perturbations obey the dispersion relation
+\begin{equation}
+    \omega^2=c_s^2\bigg(k^2-\frac{4\pi G\rho_0}{c_s^2}\bigg)\label{dispersion_Jeans}
+\end{equation}
+\end{prop}
+\begin{proof}
+Consider the perturbations about equilibrium 
+$$p=p_0+\Delta p,\quad\rho=\rho_0+\Delta\rho,\quad u=\Delta u,\quad\Phi=\Phi_0+\Delta\Phi$$
+Retaining only the first order perturbation terms, the Eqns.~\ref{continuity1}, \ref{momentumEqn} and \ref{Poisson} give respectively
+$$\frac{\partial\Delta\rho}{\partial t}+\rho_0\boldsymbol{\nabla}\cdot\Delta\mathbf{u}=0,\quad\frac{\partial\Delta\mathbf{u}}{\partial t}=-\frac{c_s^2}{\rho_0}\boldsymbol{\nabla}\Delta\rho-\boldsymbol{\nabla}\Delta\Phi,\quad\nabla^2\Delta\Phi=4\pi G\Delta\rho$$
+where we again assume a barotropic fluid. The assumptions of a uniform static medium is not consistent with the equations, we need
+$$\boldsymbol{\nabla}p_0=-\rho_0\boldsymbol{\nabla}\Phi_0,\quad\nabla^2\Phi_0=4\pi G\rho_0$$
+Otherwise if $p_0$ is a constant, then $\Phi_0$ must also be a constant. If $\Phi_0$ is a constant, then we have $\rho_0=0$. This is equivalent to the statement that a static universe is empty. Regardless, we continue to assume a uniform density constant gravitational potential cloud does satisfy the equilibrium equations (this overly-simplified assumption does give qualitatively similar results). Again, look for plane-wave solutions
+$$\Delta\rho=\rho_1e^{i(\mathbf{k}\cdot\mathbf{x}-\omega t)},\quad \Delta\Phi=\Phi_1e^{i(\mathbf{k}\cdot\mathbf{x}-\omega t)},\quad \Delta u=u_1e^{i(\mathbf{k}\cdot\mathbf{x}-\omega t)}$$
+Then we have from the perturbation equations:
+$$-\rho_1\omega+\rho_0\mathbf{k}\cdot\mathbf{u_1}=0,\quad-\rho_0\omega\mathbf{u_1}=-c_s^2\rho_1\mathbf{k}-\rho_0\Phi_1\mathbf{k},\quad -k^2\Phi_1=4\pi G\rho_1$$
+which will give the desired dispersion relation.
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item $4\pi G\rho_0/c_s^2$ is sometimes called the Jeans wavenumber $k_J^2$. $\omega$ is imaginary for $k\in\mathbb{R}$, and so the system is unstable, when $4\pi G\rho_0>k^2c_s^2$. Pressure tends to damp out density fluctuations, but gravity compresses the matter further, and what we have here is a criterion for when gravity will dominate. There is thus an associated maximum stable wavelength, where the total mass contained within this wavelength is $\sim\rho_0\lambda_J^3$ is the Jeans mass $M_J\sim\pi^{3/2}c_s^3G^{-3/2}\rho_0^{-1/2}$.
+\item The Jeans length is also the length scale over which the sound-crossing time is the same as the free-fall time under self-gravity. For a length $\ell$, the free-fall time is $\sim\ell/v$ where $v\sim\sqrt{GM/\ell}$, $M\sim\rho_0\ell^3$ $\implies$ $t_{\text{ff}}\sim1/\sqrt{G\rho_0}$. The sound-crossing time is $t_s\sim\ell/c_s$, hence $\ell\sim c_s/\sqrt{G\rho_0}$.
+\item Stars and galaxies are likely to have arisen from local over-densities of mass exceeding the local Jeans mass. As such regions began to collapse, sound waves would not have the time to run ahead of the collapse and set up the pressure gradients required to off-set further collapse. Consequently, the instability becomes non-linear (no longer small).
+\end{enumerate}
+\end{remarks}
+\newpage
+\subsection{Thermal instability}
+This concerns the stability of a medium in thermal equilibrium (heating =
+cooling) to perturbations in temperature
+Thermal instability leads to runaway heating or cooling following the perturbation of the temperature from an initial thermal equilibrium state. Whether a system is thermally unstable or not will depend on the physical processes that cool and heat the fluid and we will first examine these in more detail.
+\begin{lemma}
+\begin{equation}
+    \frac{dK}{dt}=-\frac{\gamma-1}{\rho^{\gamma-1}}\dot{Q}\label{adiabatic}
+\end{equation}
+\end{lemma}
+\begin{proof}
+We start from
+$$TdS=C_VdT-\frac{\mathcal{R}_*T}{\mu}\frac{d\rho}{\rho}=\frac{\mathcal{R}_*T}{\mu}\bigg(\frac{1}{\gamma-1}\frac{dT}{T}-\frac{d\rho}{\rho}\bigg)$$
+We also have the equation of state $p=K\rho^\gamma=\frac{\mathcal{R}_*}{\mu}\rho T$. Then,
+$$\frac{dp}{p}=\frac{d\rho}{\rho}+\frac{dT}{T}=\gamma\frac{d\rho}{\rho}+\frac{dK}{K}\implies\frac{dK}{K}=-(\gamma-1)\frac{d\rho}{\rho}+\frac{dT}{T}\implies TdS=\frac{\rho^{\gamma-1}}{\gamma-1}dK$$
+Assume an energy equation of the form $T\frac{dS}{dt}=-\dot{Q}$, then the result follows.
+\end{proof}
+We start off with a gas in thermal equilibrium, so $\dot{Q}=0$. A perturbation about thermal equilibrium could be characterized by a small temperature increase $\Delta T$. If the gas heats up locally at constant pressure, then
+$$\dot{Q}\rightarrow\dot{Q}+\frac{\partial\dot{Q}}{\partial T}\bigg|_p\Delta T$$
+if $\frac{\partial\dot{Q}}{\partial T}|_p<0$, then the temperature perturbation grows, i.e. instability. We can prove this in more detail.
+\begin{prop}[Field criterion]
+\begin{equation}
+    \frac{\partial\dot{Q}}{\partial T}\bigg|_p<0\label{fieldcriterion}
+\end{equation}
+\end{prop}
+\begin{proof}
+Consider first order perturbation about a static equilibrium in thermal balance
+$$\mathbf{u_0}=\boldsymbol{0},\quad\dot{Q}_0=0,\quad\boldsymbol{\nabla}p_0=0,\quad\boldsymbol{\nabla}K_0=0,\quad\boldsymbol{\nabla}\rho_0=0$$
+Since the unperturbed medium is uniform in all variables, the Eulerian perturbations are equal to the Lagrangian perturbations. Eqns.~\ref{continuity1} and \ref{momentumEqn} give respectively
+$$\frac{\partial\Delta\rho}{\partial t}+\rho_0\boldsymbol{\nabla}\cdot\Delta\mathbf{u}=0,\quad\rho_0\frac{\partial\Delta\mathbf{u}}{\partial t}=-\boldsymbol{\nabla}\Delta p$$
+Eqn.~\ref{adiabatic} gives
+$$\frac{\partial\Delta K}{\partial t}=-\frac{\gamma-1}{\rho_0^{\gamma-1}}\Delta\dot{Q}$$
+but $\Delta\dot{Q}=\frac{\partial\dot{Q}}{\partial p}|_p\Delta p+\frac{\partial\dot{Q}}{\partial\rho}|_p\Delta p$. Hence, we can write the thermal equation as
+$$\frac{\partial\Delta K}{\partial t}=-A^*\Delta p-B^*\Delta\rho,\quad A^*=\frac{\gamma-1}{\rho_0^{\gamma-1}}\frac{\partial\dot{Q}}{\partial p}\bigg|_\rho,\quad B^*=\frac{\gamma-1}{\rho_0^{\gamma-1}}\frac{\partial\dot{Q}}{\partial\rho}\bigg|_p$$
+Finally, we relate $\Delta p$ to $\Delta\rho$ and $\Delta K$.
+$$\frac{\Delta p}{p_0}=\frac{\Delta K}{K_0}+\gamma\frac{\Delta\rho}{\rho_0}\implies\Delta p=\rho_0^\gamma\Delta K+\gamma K_0\rho_0^{\gamma-1}\Delta\rho=\rho_0^\gamma\Delta K+c_s^2\Delta\rho$$
+where we simply defined $c_s$ as the quantity relating adiabatic density and pressure perturbation, without assuming the perturbations are adiabatic. Since we are looking for growing modes, we try an ansatz
+$$\Delta\rho=\rho_1e^{i\mathbf{k}\cdot\mathbf{x}+qt},\quad\Delta\mathbf{u}=\mathbf{u_1}e^{i\mathbf{k}\cdot\mathbf{x}+qt}$$
+Substitute to the equations first order in perturbations, we have
+$$q\rho_1+\rho_0i\mathbf{k}\cdot\mathbf{u_1}=0,~q\rho_0\mathbf{u_1}=-i\mathbf{k}p_1,~qK_1=-A^*p_1-B^*\rho_1,~p_1=\rho_0^\gamma+c_s^2\rho_1$$
+This gives
+$$\implies q^2\rho_1=-k^2p_1\implies qK_1=\frac{A^*q^2}{k^2}\rho_1-B^*\rho_1\implies\frac{A^*q}{k^2}-\frac{B^*}{q}=-\bigg(\frac{q^2}{k^2}+c_s^2\bigg)\frac{1}{\rho_0^\gamma}$$
+Rearrange this to a polynomial in $q$:
+$$E(q)=q^3+A^*q^2\rho_0^\gamma+k^2c_s^2q-B^*k^2\rho_0^\gamma=0$$
+There is an instability if there is a real positive root to the above equation, i.e. if the LHS is zero for $0\leq q<\infty$. Now, $E(\infty)=\infty$ and $E(0)=-B^*k^2\rho_0^\gamma$, so the system is unstable if $B^*>0$, i.e. if $\frac{\partial\dot{Q}}{\partial\rho}|_p>0$. This is equivalent to the condition $\frac{\partial\dot{Q}}{\partial T}|_p<0$ since
+$$\frac{\partial\dot{Q}}{\partial\rho}\bigg|_p=\frac{-\mathcal{R}_*T^2}{\mu p}\frac{\partial\dot{Q}}{\partial T}\bigg|_p$$
+\end{proof}
+\begin{remarks}
+If the system is unstable according to the Field criterion (Eqn.~\ref{fieldcriterion}), then it is indeed always unstable, regardless of the sign of the temperature derivative of the net cooling rate at fixed density.\\[5pt]
+However, if it is stable according to the Field criterion, it may still be unstable if the temperature derivative of the net cooling rate at constant density is negative. This destabilization will be effective for long wavelength perturbations. There will be no time for sound waves to re-establish pressure balance with the surroundings over the thermal timescale on which the instability develops and hence the behaviour of the cooling rate at constant density is the relevant one. In practice, the Field criterion provides a good determinant of thermal stability.
+\end{remarks}
+\begin{cor}
+If $\dot{Q}$ has the form Eqn.~\ref{cooling}, then $\alpha\geq1$ indicates stability.
+\end{cor}
+\begin{proof}
+$$\dot{Q}=\frac{Ap\mu}{\mathcal{R}_*}T^{\alpha-1}-H\implies\frac{\partial\dot{Q}}{\partial T}\bigg|_p=(\alpha-1)\frac{Ap\mu}{\mathcal{R}_*}T^{\alpha-2}$$
+Hence, the result follows.
+\end{proof}
+\begin{eg}
+Optically thin thermal Bremsstrahlung, $\alpha=0.5$, is unstable.
+\end{eg}
+The general approach to stability criteria through linearised analysis can be summarized as
+\begin{enumerate}
+    \item Write down the equations.
+    \item Decide on the equilibrium which is to be perturbed.
+    \item Write the variables as equilibrium plus Lagrangian perturbation.
+    \item Calculate corresponding expressions for the Eulerian perturbations.
+    \item Substitute expressions for the Eulerian perturbations into the Eulerian fluid equations, and retain only terms first order in the Lagrangian perturbation.
+    \item Write all Lagrangian perturbation variables of the form $e^{i\mathbf{k}\cdot\mathbf{x}+qt}$. Substitute into the equations and eliminate the coefficients.
+    \item Obtain a dispersion relation $k$ in terms of $q$, where instability $\iff q\in\mathbb{R}^+$.
+\end{enumerate}
+\newpage
+\section{Viscous flows}
+When the mean free path $\lambda$ is finite, momentum can diffuse through the fluid.
+\subsection{Linear shear}
+\begin{remarks}
+To account for the transfer of momentum between fluid cells due to viscous processes, we have
+$$\sigma_{ij}=\rho u_iu_j+p\delta_{ij}$$
+The first term is the result of momentum being advected with the fluid, whereas the second term represents a force on the element due to thermal pressure differentials, not due to velocity gradients in the flow. But, in the presence of processes which can transfer the momentum associated with velocity differences between the elements (viscous processes), we must include the viscous stress tensor $\sigma_{ij}'$.
+\end{remarks}
+Microscopically, thermal/random motion of particles can allow momentum to `diffuse' across streamlines.
+\begin{eg}[Simple model for viscous transport processes]
+Consider a flow with parallel streamlines in which the velocity gradient is perpendicular to the direction of the streamlines. If, at a microscopic level, the particles all travelled in the $i$ direction (along streamlines), then there would be no communication between the different streamlines and the viscosity would be zero. Due to thermal motion, the particles can have a random motion component in the $j$ direction (along velocity gradient), then there is the possibility of communication between streamlines.\\[5pt]
+If we consider the flux of particles carrying an average momentum in the $i$ direction corresponding to the velocity $u_i$ across the surface with normal vector $\boldsymbol{\hat{e}_j}$, and suppose the typical velocity of those particles in that direction is $v_j$ relative to the bulk velocity, then the momentum flux from the fluid element in that direction is $\rho u_iv_j$, where $v_j=\alpha\sqrt{k_BT/m}$, $O(\alpha)=1$.\\[5pt]
+In the element on the other side of the surface a similar situation applies, with an $i$-momentum flux across the surface now of $-\rho u_i^*\alpha\sqrt{k_BT/m}$, where $u_i^*$ is the streaming velocity in this element. For a path integral $\delta\ell$, we have $u_i^*=u_i+\partial_ju_i\delta\ell$, so the net momentum flux in the $j$ direction due to non-fluid processes is $-\delta\ell\rho(\partial_ju_i)\alpha\sqrt{k_BT/m}$ (assuming flow is constant velocity and temperature). The momentum transfer occur over a lengthscale comparable to the particle mean free path, since when particle-particle interactions occur, any momentum difference is redistributed between them. An appropriate value for $\ell$ is the particle interaction cross-section divided by the particle number density $n=\rho/m$, i.e. $\ell=m/\pi a^2\rho$ for hard spheres of radius $a$. The net momentum flux is 
+$$-\frac{\alpha}{\pi a^2}\sqrt{mk_BT}\partial_ju_i$$
+We may guess $\alpha\sim\frac{1}{2}$ (half the particles going with a typical speed in the $j$ direction are going in the opposite direction to the one towards the transfer surface we are considering). This gives our estimate for the shear viscosity coefficient to be 
+\begin{equation}
+\eta\sim\frac{1}{2\pi a^2}\sqrt{mk_BT}\label{vis_estimate}
+\end{equation}
+\end{eg}
+\begin{remarks}
+The viscosity is independent of the density of the gas. The denser gas has more atoms to transport the momentum, but compensated by the reduced mean free path over which the momentum transport can take place. Viscosity, however, increases with temperature. For isothermal system, $\eta$ is constant.
+\end{remarks}
+\begin{eg}
+For fully ionized plasma, like intracluster medium, the mean free path is set by Coulomb collisions, $\lambda\propto T^2$. Since $v_{\text{th}}\propto\sqrt{T}\implies\eta\propto T^{5/2}$. Compared to Eqn.~\ref{vis_estimate}, the viscosity has a stronger temperature dependence than for hard sphere collision.
+\end{eg}
+\newpage
+\subsection{Navier-Stokes}
+For a generic $\sigma_{ij}'$, it has to be Galiliean invariant, isotropic and linear in the velocity components.
+\begin{prop}[Navier-Stokes equation]
+\begin{equation}
+    \rho\bigg(\frac{\partial u_i}{\partial t}+u_j\frac{\partial u_i}{\partial x_j}\bigg)=-\frac{\partial p}{\partial x_i}+\frac{\partial}{\partial x_j}\bigg[\eta\bigg(\frac{\partial u_i}{\partial x_j}+\frac{\partial u_j}{\partial x_i}-\frac{2}{3}\delta_{ij}\frac{\partial u_k}{\partial x_k}\bigg)\bigg]+\frac{\partial}{\partial x_i}\xi\frac{\partial u_k}{\partial x_k}+\rho g_i\label{NS}
+\end{equation}
+where $\eta$ and $\xi$ are shear viscosity and bulk viscosity coefficients respectively.
+\end{prop}
+\begin{proof}
+The additional terms can be understood as follows. Our generic viscous stress tensor has the form
+$$\sigma_{ij}'=\eta\bigg(\frac{\partial u_i}{\partial x_j}+\frac{\partial u_j}{\partial x_i}-\frac{2}{3}\delta_{ij}\frac{\partial u_k}{\partial x_k}\bigg)+\xi\delta_{ij}\frac{\partial u_k}{\partial x_k}$$
+where $\eta$ and $\xi$ are independent of the velocity.
+\begin{enumerate}
+    \item $\sigma_{ij}'$ is symmetric - force on the $i$th face of a small cube in the $j$th direction equal to the force on the $j$th face in the $i$th direction.
+    \item the term with coefficient $\eta$ is a trace free symmetric tensor which represents the stress induced by shearing motions, i.e. momentum transfer in shear flows (shear viscosity)
+    \item the term with coefficient $\xi$ is a diagonal tensor representing the stresses accompanying compressive velocity fields, i.e. momentum transfer due to bulk compression of the flow (bulk viscosity).
+\end{enumerate}
+\end{proof}
+\begin{eg}
+When the flow velocity is $u_i=\varepsilon_{ijk}\Omega_jx_k$, where $\varepsilon_{ijk}$ is a permutation symbol. We have
+$$\frac{\partial u_i}{\partial x_j}=\varepsilon_{ikl}\Omega_k\frac{\partial x_l}{\partial x_j}=\varepsilon_{ikj}\Omega_k\implies\frac{\partial u_i}{\partial x_j}+\frac{\partial u_j}{\partial x_i}=0$$
+There is no viscous stress for a flow in solid body rotation, i.e. no shear in a flow which rotates as a solid body.
+\end{eg}
+\begin{remarks}
+Bulk viscosity can usually be neglected in astrophysical fluids, except in shocks. In a shock, the existence of a deceleration term in the $x$ direction proportional to the large local velocity gradient in the $x$ direction that causes the fluid to pass from supersonic to subsonic flow. Given $\xi$, we can estimate the time required to decelerate the flow and, given the mean speed in the shock, also get an estimate of the shock thickness.
+\end{remarks}
+\begin{cor}
+Neglecting bulk viscosity, the Navier-Stokes' equation is
+\begin{equation}
+    \frac{\partial\mathbf{u}}{\partial t}+\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}=-\frac{1}{\rho}\boldsymbol{\nabla}p-\boldsymbol{\nabla}\Phi+\frac{\eta}{\rho}\bigg[\nabla^2\mathbf{u}+\frac{1}{3}\boldsymbol{\nabla}(\boldsymbol{\nabla}\cdot\mathbf{u})\bigg]\label{NS2}
+\end{equation}
+\end{cor}
+\begin{proof}
+Set $\xi=0$ and simplify the terms.
+\end{proof}
+Kelvin's vorticity theorem no longer holds for viscous fluids.
+\begin{prop}
+The vorticity of a viscous barotropic flow evolves as
+\begin{equation}
+    \frac{\partial\boldsymbol{\omega}}{\partial t}=\boldsymbol{\nabla}\times(\mathbf{u}\times\boldsymbol{\omega})+\nu\nabla^2\boldsymbol{\omega}\label{NSvor}
+\end{equation}
+where $\nu=\eta/\rho$ is the kinematic viscosity.
+\end{prop}
+\begin{proof}
+Take the curl of Eqn.~\ref{NS2}. The curl of a gradient is zero, so
+$$\mathbf{u}\cdot(\boldsymbol{\nabla}\mathbf{u})=\frac{1}{2}\boldsymbol{\nabla}u^2-\mathbf{u}\times(\boldsymbol{\nabla}\times\mathbf{u})=\frac{1}{2}\boldsymbol{\nabla}u^2-\mathbf{u}\times\boldsymbol{\omega}$$
+Furthermore, for a barotropic fluid,
+$$\boldsymbol{\nabla}\times\frac{1}{\rho}\boldsymbol{\nabla}p=-\frac{1}{\rho^2}\boldsymbol{\nabla}\rho\times\boldsymbol{\nabla}p=0$$
+where for a barotropic fluid, the gradients of $p$ and $\rho$ are parallel. Equivalently, the surfaces of constant $\rho$ and $p$ align. The result follows.
+\end{proof}
+\begin{prop}[Energy dissipation in viscous flows]
+\begin{equation}
+\frac{\partial E_{\text{kin}}}{\partial t}=-\frac{1}{2}\eta\int\bigg(\frac{\partial u_i}{\partial x_k}+\frac{\partial u_k}{\partial x_i}\bigg)^2dV\label{kindiss}
+\end{equation}
+\end{prop}
+\begin{proof}
+The total kinetic energy in an incompressible fluid is $E_{\text{kin}}=\frac{1}{2}\rho\int u^2dV$. From Eqn.~\ref{NS2}, the rate of change of kinetic energy density is
+$$\frac{\partial}{\partial t}(0.5\rho u^2)=\rho u_i\bigg(-u_k\frac{\partial u_i}{\partial x_k}-\frac{1}{\rho}\frac{\partial p}{\partial x_i}-\frac{1}{\rho}\frac{\partial\sigma_{ik}'}{\partial x_k}\bigg)=-\rho u_k\partial_k\bigg[\frac{1}{2}u^2+\frac{p}{\rho}\bigg]+\partial_iu_k\sigma_{ik}'-\sigma_{ik}'\partial_ku_i$$
+where $\sigma'_{ik}$ is symmetric. But the fluid is incompressible, so
+$$\frac{\partial}{\partial t}(0.5\rho u^2)=-\partial_i\bigg[\rho u_i\bigg(\frac{1}{2}u^2+\frac{p}{\rho}\bigg)+u_k\sigma_{ik}'\bigg]+\sigma_{ik}'\partial_ku_i$$
+The term in the square brackets is the energy density flux in the fluid, consisting of the flux due to the transfer of fluid mass, and the energy flux due to processes of internal friction. Integrate over some volume $V$, and invoke divergence theorem. 
+$$\frac{\partial}{\partial t}\frac{1}{2}\rho u^2dV=-\oint\bigg[\rho\mathbf{u}\bigg(\frac{1}{2}u^2+\frac{p}{\rho}\bigg)+\mathbf{u}\cdot\sigma'\bigg]\cdot d\mathbf{S}+\int\sigma_{ik}'\frac{\partial u_i}{\partial x_k}dV$$
+The surface integral is the rate of change of kinetic energy of the fluid in $V$ owing to the energy flux through the surface bounding $V$. The volume integral is the rate of decrease in kinetic energy due to viscous dissipation. By extending the domain of integration to cover the whole extent of the fluid, then the surface integral vanishes, and we are left with
+$$\frac{\partial}{\partial t}\frac{1}{2}\rho u^2dV=\frac{1}{2}\int\sigma_{ik}'\bigg(\frac{\partial u_i}{\partial x_k}+\frac{\partial u_k}{\partial x_i}\bigg)dV=-\frac{1}{2}\eta\int\bigg(\frac{\partial u_i}{\partial x_k}+\frac{\partial u_k}{\partial x_i}\bigg)^2dV$$
+where $\sigma_{ik}'$ is symmetric, $\boldsymbol{\nabla}\cdot\mathbf{u}=0$ for an incompressible fluid. Further, for an incompressible fluid, $\sigma_{ij}'=\eta(\partial_ju_i+\partial_iu_j)$.
+\end{proof}
+\begin{remarks}
+If $\eta>0$, kinetic energy is dissipated due to viscous processes. The direction of energy flow is always the same, regardless of the form of the velocity field. The viscous dissipation is an irreversible energy transfer.
+\end{remarks}
+\begin{eg}
+Consider the steady flow of an incompressible viscous liquid through a horizontal pipe of constant diameter circular cross-section. Take the axis of the pipe as the $z$-axis, and the fluid flow is then in the $z$-direction. The velocity is then independent of $z$ (from continuity equation, Eqn.~\ref{continuity1}) but will be a function of the other two coordinates. Eqn.~\ref{NS2} gives
+$$\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}=-\frac{1}{\rho}\boldsymbol{\nabla}p+\nu\nabla^2\mathbf{u}$$
+Since $\mathbf{u}=u(x,y)\mathbf{\hat{z}}$, the LHS is zero, and so we solve
+$$\frac{\partial^2u}{\partial x^2}+\frac{\partial^2u}{\partial y^2}=\frac{1}{\eta}\frac{\partial p}{\partial z}$$
+where pressure constant over the cross-section of the pipe. LHS depends only on $x$ and $y$, but RHS depends only on $z$. We can thus set to a constant $-\frac{\Delta p}{\eta \ell}$, where $\ell$ is the pipe's length. Suppose, further, the pipe is circular,
+$$\frac{1}{r}\frac{d}{dr}\bigg(r\frac{du}{dr}\bigg)=-\frac{\Delta p}{\eta\ell}\implies u=-\frac{\Delta p}{4\eta\ell}r^2+c_1\ln r+c_2$$
+where $c_1$ and $c_2$ are integration constants. Since the velocity at the centre of the pipe is finite, $c_1=0$ and the boundary condition that $u=0$ on the inner surface at $R=R_0$ gives $u=\frac{\Delta p}{4\eta\ell}(R_0^2-r^2)$. The total mass flow rate is
+$$Q=2\pi\rho\int_0^{R_0}ru~dr=\frac{\pi\Delta p}{8\nu\ell}R_0^4$$
+\end{eg}
+\begin{remarks}
+However, if $\Delta p$ is increased, such that the Reynold number $\text{Re}=LV/\nu$ is increased beyond the threshold, the flow becomes turbulent and this solution ceases to apply.
+\end{remarks}
+\newpage
+\section{Accretion discs}
+In astrophysical situations, we commonly have gas with non-zero angular momentum bound to a central object. Regardless of the origin of this material, and whatever its initial orbital trajectories, it will settle into a plane defined by the mean angular momentum vector of the gas supply. 
+
+The residual motion in other directions will be damped out on a free-fall timescale by shocks between colliding fluid elements. But once the gas has settled into a circular orbit, centrifugal force prevents its further radial collapse on this timescale. On the other hand, the system comes into hydrostatic equilibrium with internal vertical ($\parallel\mathbf{L}$) pressure gradient balances the vertical component of gravity. The net effect is the gas settles into a ring-like or disc-like configuration. Such a system is a shear flow. If $\Omega=\Omega(r)$, it is a circular shear flow. 
+\begin{defi}[Keplerian motion]
+Circular motion with $\Omega=\sqrt{GM/R^3}$, i.e. centrifugal force balance with gravity, is referred to as Keplerian motion. Gaseous disc with this angular profile velocity is a type of shear flow.
+\end{defi}
+Due to the action of viscosity, we expect the angular momentum to be transferred from the faster-moving inner regions to the slower-moving outer regions of the disc. As the inner material loses angular momentum, it moves inward on a spiral path. Without viscosity, the elements of the disc will continue in circular orbits.
+\subsection{Viscous evolution equation}
+\begin{prop}
+Assume axisymmetric disk, which attains hydrostatic equilibrium in the $z$ direction, and the azimuthal motion is close to Keplerian velocity.
+\begin{equation}
+    \frac{\partial}{\partial t}(r\Sigma u_\phi)+\frac{1}{r}\frac{\partial}{\partial r}(\Sigma r^2u_\phi u_r)=\frac{1}{r}\frac{\partial}{\partial r}\bigg(\nu\Sigma r^3\frac{d\Omega}{dr}\bigg)\label{accretion}
+\end{equation}
+Here, the kinematic viscosity $\nu$ is strictly the density weighted average value of $\nu$ over $z$, while the bulk viscosity $\xi$ is assumed to be zero. 
+\end{prop}
+\begin{proof}
+Work in cylindrical coordinates. $u_\phi$ is the dominant velocity component, with a small radial flow $u_r$ as a result of the effects of the viscosity. Assume $u_z=0$ and $\partial_\phi$ component to be zero, i.e. the disc is axisymmetric. The surface density $\Sigma=\int\rho dz$ satisfies the continuity equation (Eqn.~\ref{continuity1})
+\begin{equation}
+\frac{\partial\rho}{\partial t}+\frac{1}{r}\frac{\partial}{\partial r}(r\rho u_r)=0\implies\frac{\partial\Sigma}{\partial t}+\frac{1}{r}\frac{\partial}{\partial r}(ru_r\Sigma)=0\label{acc1}
+\end{equation}
+The $\phi$ component of the Navier-Stokes equation (Eqn.~\ref{NS2}) is
+$$\rho\bigg(\frac{\partial u_\phi}{\partial t}+u_r\frac{\partial u_\phi}{\partial r}+\frac{u_ru_\phi}{r}\bigg)=\eta\bigg(\frac{\partial^2u_\phi}{\partial r^2}+\frac{1}{r}\frac{\partial u_\phi}{\partial r}-\frac{u_\phi}{r^2}\bigg)+\frac{\partial\eta}{\partial r}\bigg(\frac{\partial u_\phi}{\partial r}-\frac{u_\phi}{r}\bigg)$$
+where we assumed $\eta$ is not a constant. Remove any $z$ terms by integrating the equations through the depth of the disc since $u_r$ and $u_\phi$ weakly depend on $z$. 
+\begin{equation}
+\implies\bigg(\frac{\partial u_\phi}{\partial t}+u_r\frac{\partial u_\phi}{\partial r}+\frac{u_ru_\phi}{r}\bigg)\Sigma=\nu\Sigma\bigg(\frac{\partial^2u_\phi}{\partial r^2}+\frac{1}{r}\frac{\partial u_\phi}{\partial r}-\frac{u_\phi}{r^2}\bigg)+\frac{\partial\nu\Sigma}{\partial r}\bigg(\frac{\partial u_\phi}{\partial r}-\frac{u_\phi}{r}\bigg)\label{acc2}
+\end{equation}
+Here, take Eqn.~\ref{acc1}$\times ru_\phi$, plus Eqn.~\ref{acc2}$\times r$, with $\Omega=u_\phi/r$, then we obtain our desired result. 
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+    \item LHS of Eqn.~\ref{accretion} consists of the Eulerian rate of change of angular momentum per unit area of an annulus at $r$, and the net rate of angular momentum loss from this unit area due to advection of angular momentum with the radial flow. RHS represents evolution of angular momentum content of the region as a result of a net viscous torque on the region.
+    \item Multiply both sides of Eqn.~\ref{accretion} by $2\pi rdr$ (rate of change of angular momentum in an annulus of wdith $dr$) so that the RHS becomes $2\pi dr\frac{\partial}{\partial r}(\nu\Sigma r^3\frac{d\Omega}{dr})$ is the net torque on the annulus. 
+    \item The annulus will experience a spin-up torque due to viscous interaction with more rapidly rotating material at smaller radius, and a spin down torque for slower moving material at larger radius. The net torque is hence $\frac{d\tau}{dr}dr$, where $\tau(r)=2\pi\nu\Sigma r^3\frac{d\Omega}{dr}$. This is consistent with taking $r\sigma_{r\phi}2\pi 2Hr=r\rho\nu r\frac{d\Omega}{dr}2\pi 2Hr=2\pi\nu\Sigma r^3\frac{d\Omega}{dr}$, where $\Sigma=2H\rho$ and $H$ is a measure of the disc height.
+\end{enumerate}
+\end{remarks}
+\begin{cor}[Accretion disc evolution]
+Assuming the material in the disc is in nearly Keplerian orbits, then
+\begin{equation}
+    \frac{\partial\Sigma}{\partial t}=\frac{3}{r}\frac{\partial}{\partial r}\bigg(\sqrt{r}\frac{\partial}{\partial r}(\nu\Sigma\sqrt{r})\bigg)\label{accretion2}
+\end{equation}
+\end{cor}
+\begin{proof}
+Substitute $\Omega^2=GM/r^3$ into Eqns.~\ref{acc1} and \ref{acc2} and eliminate $u_r$.
+$$u_r=\frac{\partial}{\partial r}\bigg(\nu\Sigma r^3\frac{d\Omega}{dr}\bigg)\frac{1}{r\Sigma\frac{\partial}{\partial r}(r^2\Omega)}$$
+\end{proof}
+\begin{eg}
+If $\nu$ is constant, and set $s=2\sqrt{r}$, then Eqn.~\ref{accretion2} becomes
+$$\frac{\partial}{\partial t}(\sqrt{r}\Sigma)=\frac{12\nu}{s^2}\frac{\partial^2}{\partial s^2}(\sqrt{r}\Sigma)$$
+Use separation of variables, $\sqrt{r}\Sigma=T(t)S(s)$, we have
+$$\frac{T'}{T}=\frac{12\nu}{s^2}\frac{S''}{S}=-\lambda^2$$
+where $\lambda$ is a constant. The time dependence is exponential and the spatial dependence is a Bessel function. Suppose we have mass $m$ at $r_0$, i.e. $\Sigma(r,0)=\frac{m}{2\pi r_0}\delta(r-r_0)$, then using dimensionless variables $x=r/r_0$ and $\tau=12\nu tr_0^{-2}$, then
+$$\Sigma(x,\tau)=\frac{m}{\pi r_0^2\tau x^{1/4}}e^{-(1+x^2)/\tau}I_{1/4}(2x/\tau)$$
+where $I_{1/4}(2x/\tau)$ is a modified Bessel function. The action of viscosity on the ring is to spread it out, with characteristic timescale for spreading of a ring of radius $r_0$ is $t_{\text{visc}}\sim r_0^2/\nu$. Most of the mass moves inwards, losing energy and angular momentum as it does so, but a small amount of matter moves out to take up the angular momentum lost by the material which spirals in. In general,
+$$u_r=-3\nu\frac{\partial}{\partial r}\ln(\sqrt{r}\Sigma)=-\frac{3\nu}{r_0}\frac{\partial}{\partial x}\bigg[\frac{1}{4}\ln x-\frac{1+x^2}{\tau}+\ln I_{1/4}(2x/\tau)\bigg]$$
+The asymptotic behaviour of $I_{1/4}(z)$ is $\propto z^{-1/2}e^z$ for $z>>1$ and $z^{1/4}e^z$ for $z<<1$. Hence, 
+$$u_r\sim\frac{3\nu}{r_0}\bigg[\frac{1}{4x}+\frac{2x}{\tau}-\frac{2}{\tau}\bigg],\quad u_r\sim\frac{-3\nu}{r_0}\bigg[\frac{1}{2x}-\frac{2x}{\tau}\bigg]$$
+for $2x>>\tau$ and $2x<<\tau$ respectively. For $x>1$, former is positive. For $\tau>4x^2$, latter is negative. Hence, the outer parts ($2x>\tau$) move outwards and the inner part move inwards towards the accreting star. The radius at which $u_r$ changes sign moves steadily outwards. At very long times, almost all the mass $m$ has accreted into the star, and all the original angular momentum has been carried out by a very small fraction of the mass.
+\end{eg}
+\begin{remarks}
+The timescale on which the material in the annulus flows in (or out) over a radial distance $r$ is $r^2/\nu$. We may write this timescale as $t_\nu\sim r/u_\phi\times ru_\phi/\nu=r\text{Re}/u_\phi$, where Re is the Reynolds number. Suppose the viscosity is due to random particle motions, then $\nu\sim c_s\ell\implies\text{Re}\sim ru_\phi\sigma n/c_s$, where $n$ is the number density of particles and $\sigma$ is the cross-section for their interaction. But, this means the viscous timescale (due to angular momentum transport by molecular viscosity) is far greater than the age of the Universe. At such high Reynolds number $\sim 10^{14}$, the momentum transfer process will be overwhelmed by a larger scale process due to turbulent mixing.
+\end{remarks}
+As we will see, we need another source of viscosity, due to magnetohydrodynamic turbulence, driven by magnetorotational instability. 
+\newpage
+\subsection{Steady thin discs}
+We are now interested in the steady state solution - suppose there is some source of fluid that maintains a steady accretion rate through the disc. 
+\begin{prop}
+The mass inflow rate $\dot{m}$ and the viscosity $\nu$ depend linearly on each other for a fixed surface density profile in the disc.
+\begin{equation}
+    \nu\Sigma=\frac{\dot{m}}{3\pi}\bigg[1-\sqrt{\frac{R_*}{R}}\bigg]\label{accretion3}
+\end{equation}
+\end{prop}
+\begin{proof}
+Set the time-dependent part of Eqn.~\ref{acc1} and Eqn.~\ref{acc2} to zero, then for a thin disc,
+$$r\Sigma u_r=C_1,\quad \Sigma r^3\Omega u_r-\nu\Sigma r^3\frac{d\Omega}{dr}=C_2$$
+For a steady disc, the mass inflow rate is $\dot{m}=-2\pi r\Sigma u_r\implies C_1=-\frac{\dot{m}}{2\pi}$. To find $C_2$, we need to consider an inner boundary condition. Suppose that the accreting matter flows onto the surface of the star which has radius $R_*$. The star will be rotating with angular velocity less than that of a Keplarian orbit at its surface, i.e. $\Omega_*<\Omega_K(R_*)$. The angular velocity of the accreting material increases inward until it starts to decrease towards $\Omega_*$ in a boundary layer near the surface of the star. Hence there exists a radius $r=R_*+b$ at which $\frac{d\Omega}{dr}=0$. Then, if $b<<R_*$, it can be shown that $\Omega$ is very close to the Keplerian value at the point where $\frac{d\Omega}{dr}=0$. This suggests to substitute
+$$C_2=-\frac{\dot{m}}{2\pi}R_*^2\Omega=-\frac{\dot{m}}{2\pi}\sqrt{GMR_*}$$
+Put $C_2$ back and we obtain the desired result.
+\end{proof}
+\begin{remarks}
+$R_*$ is defined as the radius where the viscous torque drop to zero. $R_*$ can be the surface of an accreting star or the innermost circular orbit around a black hole.
+\end{remarks}
+\begin{prop}
+The total energy emitted by an accretion disc, for thin, high Reynolds number flow, is
+$$L=\frac{GM\dot{m}}{2R_*}$$
+Half of the rate of gravitational energy loss due to the inflow is emitted from the accretion disc.
+\end{prop}
+\begin{proof}
+For thin, high Reynolds number flow, we may omit dissipation by bulk viscosity, and $pdV$ work. From Eqn.~\ref{kindiss}, we only have $\frac{1}{2}\eta(\partial_ju_i+\partial_iu_j)^2=\eta r^2(d\Omega/dr)^2$. Integrate this over $z$ to give the energy dissipated per unit area of the disc:
+$$\int\eta r^2\bigg(\frac{d\Omega}{dr}\bigg)^2dz=\nu\Sigma r^2\bigg(\frac{d\Omega}{dr}\bigg)^2=\frac{3GM\dot{m}}{4\pi r^3}\bigg[1-\sqrt{\frac{R_*}{r}}\bigg]$$
+Integrate over the entire disc area, from $R_*$ to $\infty$, to obtain the desired result.
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item The other half remains as kinetic energy just before the gas reaches the object, where it may be dissipated in a thin boundary layer.
+\item To achieve the steady state dissipation profile (Eqn.~\ref{accretion3}), the viscous stresses mediate the location in the disc where the energy is dissipated as heat: their net role is to redistribute energy to large radii. At small radii, almost all the energy lost by inflowing material is the result of work done by viscous torques against the flow (i.e. by spin-down torques on the outer edge of each annulus). Very little is dissipated within the annulus and is thereby available as a source of luminosity. At large radii, however, the rate of energy dissipation within the annulus far exceeds what is available from the steady inflow. 
+\item Compare with the simple estimate for the energy dissipated per unit area of the disc:
+$$\sim\frac{1}{2\pi rdr}\bigg|\frac{\partial}{\partial r}\frac{GM\dot{m}}{r}\bigg|\frac{1}{2}=\frac{GM\dot{m}}{4\pi r^3}$$
+We see that this is 3 factor less. This is due to transport of energy through the disk by viscous torques.
+\item If each annulus of the disc is optically thick, it radiates as a black body with a temperature $T_{\text{eff}}(r)$ such that the emitted flux balances the viscous dissipation, i.e.
+$$2\sigma_{\text{SB}}T_{\text{eff}}(r)^4=\frac{3GM\dot{m}}{4\pi r^3}\bigg(1-\sqrt{\frac{R_*}{r}}\bigg)$$
+where $\sigma_{\text{SB}}$ is the Stefan-Boltzmann constant. The extra factor of 2 arises because radiation emerges from both sides of the disc. For $R>>R_*$, we recover the characteristic power law temperature profile of a steady state accretion disc, $T_{\text{eff}}\propto r^{-3/4}$.
+\item We see that most quantities we have calculated for a steady state thin disc, is independent of $\nu$. Hence, we have to consider non-steady disk in order to study $\nu$.
+\end{enumerate}
+\end{remarks}
+\newpage
+\section{Plasmas}
+\subsection{Magnetohydrodynamics}
+Magnetic fields are important in many astrophysical situations.
+\begin{eg}
+Magnetic fields control the dynamics in solar loops and flares. They are the source of radiation from small scales, in pulsars, to very large scales, in radio galaxies. A weak and largely disordered magnetic field with a strength of about $5\times10^{-10}$ T permeates the interstellar medium of the galaxy. Magnetic and thermal processes may be closely coupled since their energies in the interstellar magnitude are of similar magnitude.
+\end{eg}
+In general, there will be an interplay between the magnetic field and the fluid of charged particles, with the magnetic field modifying the fluid motion and the fluid motions giving rise to changes in the magnetic field. 
+\begin{remarks}[Plasma]
+We may treat plasma as an ensemble of charged particles and derive statistical properties, such as distribution functions for particle velocities, for each species. Alternatively, we can adopt a fluid approach by deriving mean properties averaged over fluid elements. We have to define different mean properties for the particle species with different charges.
+\end{remarks}
+Consider the fluid approach. Consider a plasma consisting of two charged species: protons of mass $m^+$ per particle, charge $e^+$ and fluid velocity $\mathbf{u^+}$, and electron (with analogous quantities but superscript $-$).
+\begin{eg}
+The centre of mass velocity $\mathbf{u}$ satisfy the continuity equation Eqn.~\ref{continuity1}:
+$$\frac{\partial\rho}{\partial t}+\boldsymbol{\nabla}\cdot(\rho\mathbf{u})=0,\quad\rho=m^+n^++m^-n^-,\quad\mathbf{u}=\frac{m^+n^+\mathbf{u^+}+m^-n^-\mathbf{u^-}}{m^+n^++m^-n^-}$$
+Similarly, the current density satisfy the continuity equation for charges (electromagnetism):
+$$\frac{\partial q}{\partial t}+\boldsymbol{\nabla}\cdot\mathbf{j}=0,\quad q=e^+n^++e^-n^-,\quad\mathbf{j}=n^+e^+\mathbf{u^+}+e^-n^-\mathbf{u^-}$$
+\end{eg}
+\begin{prop}[Momentum equation for MHD]
+\begin{equation}
+    \rho\bigg(\frac{\partial u}{\partial t}+\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}\bigg)=q\mathbf{E}+\mathbf{J}\times\mathbf{B}-\boldsymbol{\nabla}p\label{momentumMHD}
+\end{equation}
+\end{prop}
+\begin{proof}
+Charged particles experience the Lorentz force. From Eqn.~\ref{momentumEqn}, we can write down the force equation for each charged species, within a given fluid element:
+$$m^in^i\bigg(\frac{\partial\mathbf{u}^i}{\partial t}+\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}^i\bigg)=e^in^i(\mathbf{E}+\mathbf{u}^i\times\mathbf{B})-f^i\boldsymbol{\nabla}p$$
+where $i=+,-$. The factors $f^\pm$ give the fractions of the pressure gradient for each species. The convective derivative is calculated using the mean velocity $\mathbf{u}$. The result is obtained by performing the sum over the two species.
+\end{proof}
+\begin{remarks}
+To close this set of equations, we need the Ohm's Law
+\begin{equation}
+    \mathbf{j}=\sigma(\mathbf{E}+\mathbf{u}\times\mathbf{B})\label{Ohm}
+\end{equation}
+where $\sigma$ is the electrical conductivity. In astrophysical plasmas, the fields are generated by the motions and distributions of the charged particles. This is given by the Maxwell's equations.
+\end{remarks}
+\begin{prop}
+For non-relativistic flows, the Ampere-Maxwell law can be simplified to
+\begin{equation}
+    \boldsymbol{\nabla}\times\mathbf{B}=\mu_0\mathbf{j}\label{AmpereMaxwellMHD}
+\end{equation}
+We may also neglect the Lorentz force associated with the electric field.
+\end{prop}
+\begin{proof}
+From Faraday's law, we can anticipate $E/B\sim\ell/\tau$, where $\ell$ and $\tau$ are the length and time scales for the fields. Since it is the interaction of the fluid flow and the fields which is important in MHD, we expect $\ell/\tau\sim u$. Hence,
+$$\frac{|c^{-2}\partial_t\mathbf{E}|}{|\boldsymbol{\nabla}\times\mathbf{B}|}\sim\frac{u^2}{c^2}<<1$$
+for non-relativistic flows. Further,
+$$\frac{q}{j}\sim\frac{E}{B\varepsilon_0\mu_0}\sim\frac{u}{c^2}\implies\frac{|q\mathbf{E}|}{|\mathbf{j}\times\mathbf{B}|}\sim\frac{u^2}{c^2}<<1$$
+Physically, this means there is a net charge flow even though the net charge density is nearly zero.
+\end{proof}
+\begin{remarks}[Net charge neutrality]
+Suppose there is a positive excess of a small fraction $f$ within a sphere of radius $r$ in a plasma with a number density $n$. Electrons on the edge of the sphere experience an acceleration
+$$\dot{u}=\frac{eE}{m_e}\sim\frac{4\pi r^3}{3m_e}fn\frac{e^2}{4\pi\varepsilon_0r^2}$$
+For $f=0.01$, $r=1$ cm, and $n=10^{16}$ m$^{-3}$, we have $\dot{u}=10^{15}$ ms$^{-2}$, so the region will neutralize on a time scale of nanoseconds. The movement is so rapid we would expect some overshoot in the charge imbalance correction, and so develop charge oscillations. To be specific, suppose in a region the positive ion number density $n^+=n_0$ and for the electrons $n_e=n_0+n_1(r,t)$ with $n_1<<n_0$, then the negative charge excess gives an electric field
+$$\boldsymbol{\nabla}\cdot\mathbf{E}=\frac{-1}{\varepsilon_0}n_1e$$
+Since $m^+>>m_e$, we may neglect the contribution of the ion motions - compared with the electrons - to charge transfer. Treat the electrons as a fluid with velocity field $\mathbf{u_e}(r,t)$ relative to the protons, which is assumed to be small. Approximately, we have
+$$m_e\frac{\partial\mathbf{u_e}}{\partial t}=-e\mathbf{E}$$
+Using the continuity equation to first order:
+$$\frac{\partial n_1}{\partial t}+n_0\boldsymbol{\nabla}\cdot\mathbf{u_e}=0\implies0=\frac{1}{n_0}\frac{\partial^2n_1}{\partial t^2}-\frac{e}{m_e}\boldsymbol{\nabla}\cdot\mathbf{E}=\frac{1}{n_0}\frac{\partial^2n_1}{\partial t^2}+\frac{1}{\varepsilon_0}\frac{e^2}{m_e}n_1$$
+thus the charge imbalance oscillates with plasma frequency $\omega_p^2=n_0e^2/\varepsilon_0m_e$. We can further associate a length scale $\ell\sim u_e/\omega_p$, called the Debye length. Let the electron velocity be the thermal velocity $u_e\sim\sqrt{k_BT_e/m_e}$, then
+$$\lambda_D=\sqrt{\frac{\varepsilon_0k_BT_e}{n_0e^2}}$$
+This is an effective shielding length, a length scale where thermal motions `iron out' plasma oscillations.
+\end{remarks}
+\newpage
+\subsection{Induction equation and flux freezing}
+\begin{prop}[Induction equation]
+The rate of change of magnetic field is determined by the convection of the fieldby the fluid and diffusion through the conductive term.
+\begin{equation}
+    \frac{\partial\mathbf{B}}{\partial t}=\boldsymbol{\nabla}\times(\mathbf{u}\times\mathbf{B})+\frac{1}{\mu_0\sigma}\nabla^2\mathbf{B}\label{ind}
+\end{equation}
+\end{prop}
+\begin{proof}
+Combine the curl of induction equation Eqn.~\ref{AmpereMaxwellMHD} and the Ohm's Law \ref{Ohm}, and assume $\sigma$ is constant. Take curl of Eqn.~\ref{ind}, we have
+$$\boldsymbol{\nabla}\times(\boldsymbol{\nabla}\times\mathbf{B})=\mu_0\sigma(\boldsymbol{\nabla}\times\mathbf{E}+\boldsymbol{\nabla}\times(\mathbf{u}\times\mathbf{B}))=\mu_0\sigma(\partial_t\mathbf{B}+\boldsymbol{\nabla}\times(\mathbf{u}\times\mathbf{B}))$$
+where we used Faraday's law to eliminate $\mathbf{E}$. But LHS is 
+$$\boldsymbol{\nabla}\times(\boldsymbol{\nabla}\times\mathbf{B})=-\nabla^2\mathbf{B}-\boldsymbol{\nabla}(\boldsymbol{\nabla}\cdot\mathbf{B})=-\nabla^2\mathbf{B}$$
+Result follows.
+\end{proof}
+\begin{remarks}
+We can neglect the diffusion term if $\sigma$ is sufficiently large.
+\end{remarks}
+\begin{prop}
+For a perfectly conducting fluid ($\sigma\rightarrow\infty$), the magnetic flux $\Phi$ through a surface $\mathbf{S}(t)$ comoving with the fluid is zero, i.e. magnetic field is frozen in to a perfectly conducting fluid.
+\end{prop}
+\begin{proof}
+The rate of change of magnetic flux $\Phi$ is
+$$\frac{d\Phi}{dt}=\lim_{dt\rightarrow 0}\bigg[\int_{\mathbf{S}(t+dt)}\mathbf{B}(t+dt)\cdot d\mathbf{S}-\int_{\mathbf{S}(t)}\mathbf{B}(t)\cdot d\mathbf{S}\bigg]\frac{1}{dt}$$
+Since the flux through a closed surface is zero, we have, at time $t+dt$,
+$$\int_{\mathbf{S}(t+dt)}\mathbf{B}(t+dt)\cdot d\mathbf{S}+\int_\xi\mathbf{B}(t+dt)\cdot d\xi-\int_{\mathbf{S}(t)}\mathbf{B}(t+dt)\cdot d\mathbf{S}=0$$
+where $\xi$ is the surface which, together with $\mathbf{S}(t)$ and $\mathbf{S}(t+dt)$, makes up the closed surface containing the paths between time $t$ and $t+dt$ for all the fluid particles passing through $\mathbf{S}$ at time $t$. But, $d\xi=d\mathbf{x}\times\mathbf{u}dt$, where $d\mathbf{x}$ is any line element in the surface $\xi$, so
+\begin{align}
+    \frac{d\Phi}{dt}&=\lim_{dt\rightarrow 0}\bigg[\int_{\mathbf{S}(t)}(\mathbf{B}(t+dt)-\mathbf{B}(t))\cdot d\mathbf{S}-\int_\xi\mathbf{B}(t+dt)\cdot d\mathbf{x}\times\mathbf{u}dt\bigg]\frac{1}{dt}\nonumber\\&=\int_{\mathbf{S}(t)}\frac{\partial\mathbf{B}}{\partial t}\cdot d\mathbf{S}-\int_\mathcal{C}(\mathbf{u}\times\mathbf{B})d\mathbf{x}\nonumber\\&=\int_{\mathbf{S}(t)}\bigg[\frac{\partial\mathbf{B}}{\partial t}-\boldsymbol{\nabla}\times(\mathbf{u}\times\mathbf{B})\bigg]\cdot d\mathbf{S}\nonumber\\&=\frac{1}{\mu_0\sigma}\int_{\mathbf{S}(t)}\nabla^2\mathbf{B}\cdot d\mathbf{S}\nonumber
+\end{align}
+where $\mathcal{C}$ is any contour in the surface $\xi$. We chose $\mathcal{C}$ to be the contour enclosing $\mathbf{S}(t)$, such that we may invoke Stokes' theorem. But by remarks 12.4, we may neglect the diffusion term $\nabla^2\mathbf{B}$ if $\sigma\rightarrow\infty$.
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+    \item The proof in Proposition 12.4 is similar to the derivation for the conservation of vorticity flux through a surface moving with the fluid element (Eqn.~\ref{vorticityfl}).
+    \item For a perfectly conducting fluid, the fluid and the magnetic field move exactly together, in the sense that a magnetic field line consists of the same fluid particles at all time.
+    \item Another consequence of infinite conductivity is $\mathbf{E}+\mathbf{u}\times\mathbf{B}=\boldsymbol{0}\implies\mathbf{E}\cdot\mathbf{B}=0$, i.e. electric and magnetic fields are perpendicular. Hence, there will be no work done on the fluid by the fields.
+\end{enumerate}
+\end{remarks}
+\begin{prop}
+The magnetic pressure is
+\begin{equation}
+    p_{\text{mag}}=\frac{B^2}{2\mu_0}\label{magpress}
+\end{equation}
+\end{prop}
+\begin{proof}
+The magnetic force density is 
+$$f_{\text{mag}}=\mathbf{j}\times\mathbf{B}=\frac{1}{\mu_0}(\boldsymbol{\nabla}\times\mathbf{B})\times\mathbf{B}=\frac{1}{\mu_0}\bigg[-\boldsymbol{\nabla}\frac{B^2}{2}+(\mathbf{B}\cdot\boldsymbol{\nabla})\mathbf{B}\bigg]$$
+Compare with Eqn.~\ref{momentumMHD}, the first term on the RHS behaves like a hydrostatic pressure of magnitude $p_{\text{mag}}$.
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+    \item Looking at $(\boldsymbol{B}\cdot\boldsymbol{\nabla})\mathbf{B}$ in cylindrical coordinate system, we can choose say $\mathbf{B}=B_0\boldsymbol{\hat{\theta}}$, then this term is equivalent ot a tension per unit area of magnitude $\frac{B^2}{\mu_0}$ along the field lines.
+    \item The relative importance of the ram pressure, gas pressure and the magnetic pressure terms is given by the relative sizes of $0.5\rho u^2$, $\rho c_s^2$ and $B^2/2\mu_0$, where $c_s$ is the sound speed in the gas.
+    \item Our main assumptions so far:
+    \begin{itemize}
+        \item neglect displacement current for non-relativistic flow
+        \item infinite conductivity fluid - flux freezing and no work done on the fluid by the fields.
+        \item negligible charge separation - neglect Lorentz force associated with $\mathbf{E}$
+    \end{itemize}
+    which gives the equations of ideal magnetohydrodynamics (neglect cooling and viscosity):
+    $$\frac{\partial\rho}{\partial t}+\boldsymbol{\nabla}\cdot(\rho\mathbf{u})=0,\quad\rho\bigg(\frac{\partial\mathbf{u}}{\partial t}+\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}\bigg)=\mathbf{j}\times\mathbf{B}-\boldsymbol{\nabla}p,\quad p=K\rho^{5/3}$$
+    $$\boldsymbol{\nabla}\times(\mathbf{u}\times\mathbf{B})=-\frac{\partial\mathbf{B}}{\partial t},\quad\boldsymbol{\nabla}\times\mathbf{B}=\mu_0\mathbf{j},\quad\boldsymbol{\nabla}\cdot\mathbf{B}=0$$
+\end{enumerate}
+\end{remarks}
+\newpage
+\subsection{Waves in plasmas}
+\begin{defi}[Alfv\'{e}n velocity]
+The equality of kinetic and magnetic energy densities defines a velocity
+\begin{equation}
+    v_A=\sqrt{\frac{B^2}{\rho\mu_0}}\label{Alfv\'{e}n}
+\end{equation}
+\end{defi}
+\begin{prop}
+For a uniform density ideal barotropic fluid at rest, threaded by a uniform magnetic field $\mathbf{B_0}$. Consider a small disturbance to the equilibrium situation, with the small displacements denoted by subscript 1. These small displacements follow wave-like motions which satisfy
+\begin{equation}
+    \frac{\partial^2\mathbf{u_1}}{\partial t^2}-c_s^2\boldsymbol{\nabla}(\boldsymbol{\nabla}\cdot\mathbf{u_1})+\mathbf{v_A}\times\boldsymbol{\nabla}\times[\boldsymbol{\nabla}\times(\mathbf{u_1}\times\mathbf{v_A})]=0\label{Alfvenwaves}
+\end{equation}
+\end{prop}
+\begin{proof}
+Simplify the equations Eqn.~\ref{continuity1} and~\ref{momentumEqn} to first order of the displacement:
+$$\frac{\partial\rho_1}{\partial t}+\rho_0\boldsymbol{\nabla}\cdot\mathbf{u_1}=0,\quad\rho_0\frac{\partial\mathbf{u_1}}{\partial t}=-\boldsymbol{\nabla}p_1-\frac{1}{\mu_0}\mathbf{B_0}\times(\boldsymbol{\nabla}\times\mathbf{B_1})=-c_s^2\boldsymbol{\nabla}\rho_1-\frac{1}{\mu_0}\mathbf{B_0}\times(\boldsymbol{\nabla}\times\mathbf{B_1})=0$$
+where initial field is uniform, i.e. $\boldsymbol{\nabla}\times\mathbf{B_0}=0$, and $p(\rho)$ relation gives $p_1/p_0=\gamma\rho_1/\rho_0$. Take time derivative:
+$$\frac{\partial^2\mathbf{u_1}}{\partial t^2}+\frac{c_s^2}{\rho_0}\boldsymbol{\nabla}\frac{\partial\rho_1}{\partial t}+\frac{\mathbf{B_0}}{\mu_0\rho_0}\times\bigg(\boldsymbol{\nabla}\times\frac{\partial\mathbf{B_1}}{\partial t}\bigg)=0$$
+$\partial\rho_1/\partial t$ can be obtained from the continuity equation, but for the rate of change of magnetic field, this is given by the Eqn.~\ref{ind}, which for highly conductive fluid will give
+$$\frac{\partial\mathbf{B_1}}{\partial t}=\boldsymbol{\nabla}\times(\mathbf{u_1}\times\mathbf{B_0})$$
+Together with Eqn.~\ref{Alfv\'{e}n}, this will be give our desired result.
+\end{proof}
+\begin{remarks}
+We could also write Eqn.~\ref{Alfvenwaves} directly as a system of equations in terms of the perturbations.
+$$\omega\delta\rho=\rho_0\mathbf{k}\cdot\delta\mathbf{u},\quad\omega\rho_0\delta\mathbf{u}=\frac{1}{\mu_0}\bigg[(\mathbf{B_0}\cdot\delta\mathbf{B})\mathbf{k}-(\mathbf{B_0}\cdot\mathbf{k})\delta\mathbf{B}\bigg]+c_s^2\delta\rho\mathbf{k},\quad\omega\delta\mathbf{B}=\mathbf{B_0}(\mathbf{k}\cdot\delta\mathbf{u})-(\mathbf{B_0}\cdot\mathbf{k})\delta\mathbf{u}$$
+\end{remarks}
+\begin{cor}
+If $\mathbf{k}\perp\mathbf{v_A}$, the only solution is longitudinal magnetosonic wave. If $\mathbf{k}\parallel\mathbf{v_A}$, there are an ordinary longitudinal wave and a transverse magnetosonic wave.
+\end{cor}
+\begin{proof}
+Try ansatz $\mathbf{u_1}=\mathbf{\tilde{u}_1}e^{i(\mathbf{k}\cdot\mathbf{x}-\omega t)}$. We can write $\mathbf{v_A}\times\boldsymbol{\nabla}\times[\boldsymbol{\nabla}\times(\mathbf{u_1}\times\mathbf{v_A})]$ in Eqn.~\ref{Alfv\'{e}nwaves} in component notation:
+\begin{align}
+&\varepsilon_{jlm}v_l\varepsilon_{mnp}\partial_n\varepsilon_{pqr}\partial_q\varepsilon_{rst}u_sv_t\nonumber\\&=(\delta_{jn}\delta_{lp}-\delta_{ln}\delta_{jp})v_l\partial_n(\delta_{ps}\delta_{qt}-\delta_{qs}\delta_{pt})\partial_qu_sv_t\nonumber\\&=(v_p\partial_j-v_l\partial_l\delta_{jp})(\partial_qu_pv_q-\partial_qu_qv_p)\nonumber\\&=v_pv_q\partial_j\partial_qu_p-v_pv_p\partial_j\partial_qu_q-v_qv_l\partial_l\partial_qu_j+v_lv_j\partial_l\partial_qu_q\nonumber\\&=(v_pv_q\tilde{u}_pik_jik_q-v_pv_p\tilde{u}_qik_jik_q-v_qv_l\tilde{u}_jik_lik_q+v_lv_j\tilde{u}_qik_lik_q)e^{i(\mathbf{k}\cdot\mathbf{x}-\omega t)}\nonumber\\&=[-(\mathbf{v_a}\cdot\mathbf{\tilde{u}})(\mathbf{v_A}\cdot\mathbf{k})\mathbf{k}+(\mathbf{v_A}\cdot\mathbf{v_A})(\mathbf{k}\cdot\mathbf{\tilde{u}})\mathbf{k}+(\mathbf{v_A}\cdot\mathbf{k})(\mathbf{v_A}\cdot\mathbf{k})\mathbf{\tilde{u}}-(\mathbf{v_A}\cdot\mathbf{k})(\mathbf{k}\cdot\mathbf{\tilde{u}})\mathbf{v}_A]e^{i(\mathbf{k}\cdot\mathbf{x}-\omega t)}\nonumber
+\end{align}
+where $\partial_ju_i=\tilde{u}_ie^{i(\mathbf{k}\cdot\mathbf{x}-\omega t)}ik_j$. Moreover, we have
+$$c_s^2\boldsymbol{\nabla}(\boldsymbol{\nabla}\cdot\mathbf{u_1})=-c_s^2\partial_j\partial_k\mathbf{u_k}=-c_s^2(\mathbf{k}\cdot\mathbf{\tilde{u}})\mathbf{k}e^{i(\mathbf{k}\cdot\mathbf{x}-\omega t)},\quad\frac{\partial^2\mathbf{u_1}}{\partial t^2}=-\omega^2\mathbf{\tilde{u}}e^{i(\mathbf{k}\cdot\mathbf{x}-\omega t)}$$
+We finally obtain
+\begin{equation}
+-\omega^2\mathbf{u_1}+(c_s^2+v_A^2)(\mathbf{k}\cdot\mathbf{u_1})\mathbf{k}+(\mathbf{v_A}\cdot\mathbf{k})[(\mathbf{v_A}\cdot\mathbf{k})\mathbf{u_1}-(\mathbf{v_A}\cdot\mathbf{u_1})\mathbf{k}-(\mathbf{k}\cdot\mathbf{u_1})\mathbf{v_A}]=0\label{disptemp1}
+\end{equation}
+If $\mathbf{k}\perp\mathbf{v_A}$, the last term in Eqn.~\ref{disptemp} vanishes. But since $\mathbf{k}$ is perpendicular to lines of constant phase, whereas $\mathbf{v_A}$ is parallel to the unperturbed field, the solution is then a longitudinal magnetosonic wave with phase velocity 
+$$-\omega^2\mathbf{u_1}+(c_s^2+v_A^2)k^2\mathbf{u_1}=0\implies v_p=\sqrt{c_s^2+v_A^2},\quad v_A^2=\frac{B^2}{\rho\mu_0}$$
+i.e. hydrostatic and magnetic pressures. This is the \textbf{fast} magnetosonic wave.\\[5pt]
+Longitudinal disturbances result in successive rarefactions and compressions, just as in an ordinary sound wave. The magnetic field lines, however, are bunched together in the compressions since the field is `frozen' to the fluid, and this means there is an additional magnetic pressure resisting the compression.\\[5pt]
+But, if $\mathbf{k}\parallel\mathbf{v_A}$, then we have to retain all terms in Eqn.~\ref{disptemp}. After some manipulation,
+\begin{equation}
+(k^2v_A^2-\omega^2)\mathbf{u_1}+\bigg(\frac{c_s^2}{v_A^2}-1\bigg)k^2(\mathbf{v_A}\cdot\mathbf{u_1})\mathbf{v_A}=0\label{disptemp2}
+\end{equation}
+There are now two types of wave motion.
+\begin{itemize}
+    \item ordinary longitudinal wave, with $\mathbf{u_1}\parallel\mathbf{k},\mathbf{v_A}$. Dot Eqn.~\ref{disptemp2} with $\mathbf{v_A}$ to obtain:
+    $$0=(k^2v_A^2-\omega^2)(\mathbf{u_1}\cdot\mathbf{v_A})+\bigg(\frac{c_s^2}{v_A^2}-1\bigg)k^2(\mathbf{v_A}\cdot\mathbf{u_1})v_A^2=(\mathbf{u_1}\cdot\mathbf{v_A})(k^2v_A^2-\omega^2+k^2(c_s^2-v_A^2))$$
+    The phase velocity is just $v_p=c_s$, i.e. an ordinary sound wave. The compressions and rarefactions leave the field undisturbed and experiences no hydromagnetic forces. This is because the velocity perturbations are directed along $\mathbf{B}$.
+    \item transverse wave, with $\mathbf{v_A}\cdot\mathbf{u_1}=0$. Dot Eqn.~\ref{disptemp2} with $\mathbf{u_1}$ to obtain: 
+    $$0=(k^2v_A^2-\omega^2)u_1^2\implies v_p=\frac{\omega}{k}=v_A$$
+    with a phase velocity equal to the Alfv\'{e}n speed $v_A$. This is a purely magnetohydrodynamic wave, which depends effectively on the tension in the magnetic field lines and the inertia of the material which moves with the field, since the field is `frozen in'.
+\end{itemize}
+\end{proof}
+\begin{remarks}
+Transverse solutions require a magnetic field, since thermal pressure which acts normally on any surface in the fluid cannot generate transverse stresses. For $\mathbf{k}\perp\mathbf{B_0}\implies\mathbf{B_1}=\frac{k}{\omega}u_1\mathbf{B_0}$. Separately, when $\mathbf{k}\parallel\mathbf{B_0}$, $\mathbf{B_1}=0$ for longitudinal waves while $\mathbf{B_1}=-\frac{ku_1}{\omega}\mathbf{B_0}$ for transverse waves.
+\end{remarks}
+\begin{eg}
+In the solar photosphere, the density is about $10^{-4}$ kg m$^{-3}$, so $v_A\approx 10^5 B$ m/s. Solar magnetic fields is about $10^{-4}T$. The effective temperature at the solar surface is 5770 K, so the sound speed is $\sim 10^4$ m/s.
+\end{eg}
+\begin{eg}
+In giant molecular cloud complexes, where the kinetic and magnetic energy densities are comparable, and exceed the thermal energy of the very cold gas in these clouds by more than an order of magnitude. Shocks may be `softened' in this environment: fluid elements may collide at speeds that are supersonic but sub-Alfv\'{e}nic. Nevertheless, this does not extend the timescale on which clouds would dissipate their internal motions and collapse.
+\end{eg}
+\begin{remarks}
+Much of the structure of the dense interstellar medium can only be understood in terms of magnetised shocks. Since the field structure determines the compression and heating in the shock, the abundances of certain temperature sensitive molecules in shocked regions provides a good diagnostic of the strength and local topology of magnetic fields in these regions.
+\end{remarks}
+\newpage
+\subsection{Instabilities in plasmas}
+Magnetic field may stabilize a stratified fluid in which a higher density fluid is above a lower density one in a gravitational field.
+\begin{prop}[Stabilizing a Rayleigh Taylor unstable system]
+Consider two incompressible fluids at rest, denser one above the other in a uniform gravitational field. Now apply a uniform magnetic field with field lines parallel to the interface between the fluids. The dispersion relation of the perturbation is
+\begin{equation}
+    \omega^2=kg\frac{\rho_2-\rho_1}{\rho_2+\rho_1}+\frac{2}{\mu_0}\frac{k^2B_0^2}{\rho_2\rho_1}\label{dispersion}
+\end{equation}
+\end{prop}
+\begin{proof}
+Take each fluid to be incompressible and suppose the displacement in the fluid is $\boldsymbol{\xi}=\boldsymbol{\xi}(x)e^{i(kz-\omega t)}$. Eqns.~\ref{continuity1} and \ref{momentumMHD} are
+$$\frac{\partial\rho}{\partial t}+\boldsymbol{\nabla}\cdot(\rho\mathbf{u})=0,\quad\rho\bigg(\frac{\partial\rho}{\partial t}+\mathbf{u}\cdot\boldsymbol{\nabla}\mathbf{u}\bigg)=\mathbf{j}\times\mathbf{B}-\boldsymbol{\nabla}p+\rho\mathbf{g}$$
+where $\mathbf{g}=-g\mathbf{\hat{x}}$ and in the unperturbed state, $\mathbf{B}=B^0\mathbf{\hat{z}}$ (it's a first order quantity since $\mathbf{j}=0$ in the unperturbed case) satisfies Eqns.~\ref{ind} (in high conductivity limit) and~\ref{AmpereMaxwellMHD} are
+$$\frac{\partial\mathbf{B}}{\partial t}=\boldsymbol{\nabla}\times(\mathbf{u}\times\mathbf{B}),\quad\boldsymbol{\nabla}\times\mathbf{B}=\mu_0\mathbf{j}$$
+We have $\mathbf{u}=\frac{\partial\boldsymbol{\xi}}{\partial t}=-i\omega\boldsymbol{\xi}$, and so the Eqn.~\ref{momentumMHD} gives
+$$\implies-\rho\omega^2\boldsymbol{\xi}=-\mathbf{\hat{x}}\bigg(\frac{dp}{dx}+\rho g\bigg)-\mathbf{\hat{z}}\frac{dp}{dz}+\mathbf{j}\times\mathbf{B^0}$$
+Component-wise, this gives $-\rho\omega^2\xi_x=-\frac{dp}{dx}-\rho g+(\mathbf{j}\times\mathbf{B^0})_x$ and $-\rho\omega^2\xi_z=-ikp^1$. The incompressibility condition gives
+$$0=\boldsymbol{\nabla}\cdot\mathbf{u}\implies0=\frac{d\xi_x}{dx}+ik\xi_z$$
+Together with $-\rho\omega^2\xi_z=-ikp^1$, we have
+\begin{equation}
+p^1=\frac{\rho\omega^2}{ik}\xi_z=\frac{d\xi_x}{dx}\rho\frac{\omega^2}{k^2}\implies\frac{dp^1}{dx}=\frac{d}{dx}\bigg[\rho\frac{\omega^2}{k^2}\frac{d\xi_x}{dx}\bigg]\label{pressureperturb}
+\end{equation}
+where in equilibrium, $\frac{dp}{dx}=-\rho g$. The flux freezing Eqn.~\ref{ind} (in the limit of high conductivity) gives
+$$-i\omega\mathbf{B^1}=\boldsymbol{\nabla}\times(-i\omega\boldsymbol{\xi}\times\mathbf{B^0})$$
+where $\mathbf{B^1}=\mathbf{B^1}(x)e^{i(kz-\omega t)}$. Since the only non-zero component of $\mathbf{B^0}$ is the $z$-component, we find $B_x^1=B^0ik\xi_x$ and $B_z^1=-B^0\frac{d\xi_x}{dx}$. Use Ampere's law Eqn.~\ref{AmpereMaxwellMHD} to obtain
+\begin{equation}
+\mu_0j_y=\bigg(\frac{\partial B_x^1}{\partial z}-\frac{\partial B_z^1}{\partial x}\bigg)=B^0\bigg(\frac{d^2\xi_x}{dx^2}-k^2\xi_x\bigg)\label{currentterm}
+\end{equation}
+Finally, we consider the perturbed density. The fluids are incompressible so there is no density variation within each component, but we do have to consider the density dependence near the boundary in the Eulerian formulation. Continuity equation Eqn.~\ref{continuity1} gives
+\begin{equation}
+-i\omega\rho^1-i\omega\boldsymbol{\xi}\cdot\boldsymbol{\nabla}\rho_0=0\implies\rho^1=-\xi_x\frac{d\rho_0}{dx}\label{densityperturb}
+\end{equation}
+Using Eqns.~\ref{densityperturb}, \ref{pressureperturb},~\ref{currentterm} into the result from Eqn.~\ref{momentumMHD}, and after some simplifying
+$$\frac{d}{dx}\bigg(\rho_0\frac{d\xi_x}{dx}\bigg)-k^2\rho_0\xi_x-\frac{k^2}{\omega^2}g\frac{d\rho_0}{dx}\xi_x-\frac{1}{\mu_0}\bigg(\frac{kB^0}{\omega}\bigg)^2\bigg[\frac{d^2\xi_x}{dx^2}-k^2\xi_x\bigg]=0$$
+Integrate with respect to $x$ across the interface separating the two fluids, whilst applying the boundary condition that the fluid displacement is zero as $x\rightarrow\pm\infty$ and that $\xi_x$ is continuous across the boundary at $x=0$, then the values of $\omega$ which permit these boundary conditions are given by the desired dispersion relation.
+\end{proof}
+\begin{remarks}\leavevmode
+\begin{enumerate}
+\item The second term on the RHS of Eqn.~\ref{dispersion} is always positive, so the presence of magnetic field does help to stabilize the configuration. Work is expended by the fluid in bending the field lines. This field line bending term is proportional to $k^2$, the stabilizing effect is stronger for short wavelength modes, with a critical wavenumber of
+$$k>k_{\text{crit}}=\frac{g\mu_0}{2B^2_0}(\rho_1-\rho_2)$$
+\item If the perturbation is at some arbitrary angle with respect to the field, then Eqn.~\ref{dispersion} will become
+$$\omega^2=kg\frac{\rho_2-\rho_1}{\rho_2+\rho_1}+\frac{2}{\mu_0}\frac{(\mathbf{k}\cdot\mathbf{B_0})^2}{\rho_1+\rho_2}$$
+When $\mathbf{k}\perp\mathbf{B}$, there is no stabilizing effect at all. Some growth modes are suppressed by the magnetic field, but not all. In practice, the Rayleigh Taylor instability cannot be completely stabilized by magnetic fields but that in the case of strong fields, only perturbations propagating close to perpendicular to the interface will be able to grow in the linear regime.
+\end{enumerate}
+\end{remarks}
+\begin{eg}
+Convection is thus modified in the presence of strong fields. Along with lower gas pressure in magnetic regions required to balance the gas pressure in outside regions of the solar photosphere, which accounts for the low temperature (dark appearance) of sunspots.
+\end{eg}
+\subsection{Magnetorotational instability}
+We study the stability of plasma in orbit around a central body.
+\begin{prop}
+\begin{equation}
+    \omega^4-\omega^2\bigg(4\Omega^2-\frac{d\Omega^2}{d\ln r}+2(kv_A)^2\bigg)+(kv_A)^2\bigg[(kv_A)^2+\frac{d\Omega^2}{d\ln r}\bigg]=0\label{MRI}
+\end{equation}
+\end{prop}
+\begin{proof}
+Consider a `local analysis' of the system - some small patch of rotating flow at $\mathbf{r}=\mathbf{R_0}$. We work in a comoving reference frame of equilibrium flow. Let our local frame of reference rotate at $\Omega(R_0)$ and set up coordinate such that $\mathbf{\hat{z}}\parallel\boldsymbol{\Omega}$ and $\mathbf{\hat{x}}$ points outwards away from the central body axis. In the Lagrangian picture, the full momentum equation is
+$$\frac{D\mathbf{u}}{Dt}=-\frac{1}{\rho}\boldsymbol{\nabla}p+\frac{1}{\mu_0\rho}(\boldsymbol{\nabla}\times\mathbf{B})\times\mathbf{B}+2\mathbf{u}\times\boldsymbol{\Omega}+\boldsymbol{\Omega}\times(\boldsymbol{\Omega}\times\mathbf{r})-r\Omega(r)^2\mathbf{\hat{r}}$$
+We simplify the analysis by assuming the flow is cold (such that pressure forces are negligible). We introduce perturbations and look for plane wave solutions. Then, we have
+$$-i\omega\Delta\mathbf{u}-2\Delta\mathbf{u}\times\boldsymbol{\Omega}=\frac{i}{\mu_0\rho}B_0k\Delta\mathbf{B}-\Delta xR\frac{d\Omega^2}{dr}\mathbf{\hat{r}}$$
+where we may relate $\Delta u_x=\frac{D\Delta x}{Dt}=-i\omega\Delta x$. The induction equation Eqn.~\ref{ind} gives
+$$\frac{\partial\Delta\mathbf{B}}{\partial t}=\boldsymbol{\nabla}\times(\Delta\mathbf{u}\times\mathbf{B_0})=(\mathbf{B_0}\cdot\boldsymbol{\nabla})\Delta\mathbf{u}\implies-i\omega\Delta\mathbf{B}=ikB_0\Delta\mathbf{u}$$
+By writing out the component form as a matrix,
+$$\begin{pmatrix}\omega^2-(kv_A)^2-\frac{d\Omega^2}{d\ln r}&-2i\omega\Omega\\2i\omega\Omega&\omega^2-(kv_A)^2\\\end{pmatrix}\begin{pmatrix}\Delta u_x\\\Delta u_y\\\end{pmatrix}=\boldsymbol{0}$$
+To find non-trivial solutions, we set the determinant to zero, which gives out result.
+\end{proof}
+\newpage
+\begin{remarks}\leavevmode
+\begin{enumerate}
+    \item If we turn off the magnetic forces by setting $v_A=0$ in Eqn.~\ref{MRI}, we obtain
+    $$\omega^2=4\Omega^2+\frac{d\Omega^2}{d\ln r}=\frac{1}{r^3}\frac{d}{dr}(r^4\Omega^2)$$
+    For a Keplerian profile $\Omega^2=GM/r^3$, or any profile with specific angular momentum $r^2\Omega$ increases with radius, this describes local radial oscillations of the flow at radial epicyclic frequency $\kappa_r:=\sqrt{\frac{1}{r^3}\frac{d}{dr}(r^4\Omega^2)}$.
+    \item When $v_A>0$, there will be instability if $\omega^2<0$. Equivalently,
+    $$(kv_A)^2+\frac{d\Omega^2}{d\ln r}<0$$
+    This is the magnetorotational instability condition. 
+    \item For sufficiently weak magnetic field or long wavelength (small $k$) modes, there will be instability if angular velocity decreases outwards, i.e. $\frac{d\Omega^2}{dr}<0$.
+    \item Magnetic tension will stabilize modes with $k>k_{\text{crit}}$ where
+    $$(k_{\text{crit}}v_A)^2=-\frac{d\Omega^2}{d\ln r}$$
+    which is $3\Omega^2$ for Keplerian. For Keplerian, the fastest growing mode has a growth rate $|\omega_{\text{max}}|=1.5\Omega$, and wavenumber given by $k_{\text{max}}v_A\approx\Omega$. The maximum growth rate is independent of $B$ field, but require $B_0\neq 0$. The wavelength of the mode with the maximum growth rate $k_{\text{max}}\rightarrow\infty$ as $B_0=0$, so in practice, finite viscosity or finite conductivity effects will kill the magnetorotational instability for sufficiently small $B_0$.
+    \item Magnetorotational instability is central to the modern theory of accretion disks, and it drives the turbulence essential for the transport of angular momentum in an accretion disk.
+\end{enumerate}
+\end{remarks}
+\end{document}
